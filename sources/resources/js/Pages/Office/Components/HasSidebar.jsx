@@ -1,4 +1,6 @@
-export default function HasSidebar() {
+import HasAutoSidebar from "./HasAutoSidebar";
+
+export default function HasSidebar(props) {
     return (
         <div className="flex flex-col flex-auto flex-shrink-0 antialiased text-gray-800 p-[15px]">
             <div className="flex flex-col top-0 left-0 w-64 bg-white h-full border-r rounded-2xl w-full">
@@ -37,6 +39,7 @@ export default function HasSidebar() {
                                 </span>
                             </a>
                         </li>
+                        <HasAutoSidebar posttype={props.posttype} />
                         <li className="px-5">
                             <div className="flex flex-row items-center h-8">
                                 <div className="text-sm font-light tracking-wide text-gray-500">

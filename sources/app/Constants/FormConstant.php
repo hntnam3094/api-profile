@@ -14,7 +14,7 @@ class FormConstant
     public const FORM = [
         self::HOME => [
             self::HOME_SLIDER => HomeConstant::SLIDER_TOP,
-            self::HOME_STORY => []
+            self::HOME_STORY => HomeConstant::HOME_STORY
         ],
         self::SAMPLE => self::SAMPLE_FORM
     ];

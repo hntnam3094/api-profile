@@ -61,7 +61,7 @@ class StructionService {
             DB::beginTransaction();
 
             list($attr, $pageCode, $code) = $this->getPageCodeAndCode($attr);
-            // dd($attr);
+
             if (!empty($id)) {
                 $this->structionMetaRepository->deleteByStructionDetailId($id);
             } else {
@@ -87,7 +87,6 @@ class StructionService {
                     if ($key === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
                             $val['image'] = $this->saveImages($val['image']);
-                            // dd($val['image']);
                         }
 
                         $value = json_encode($value);
@@ -114,8 +113,8 @@ class StructionService {
         if ($value && $value[0] && gettype($value[0]) != 'string') {
             $image = $value[0];
             $imgName = time() . time().rand(100,999) . '.' . $image->getClientOriginalExtension();
-            $path = 'public/struction/' . Carbon::now()->format('Ymd') . '/' . $imgName;
-            Storage::disk(config('disks.public'))->put($path, file_get_contents($image));
+            $path = 'struction/' . Carbon::now()->format('Ymd') . '/' . $imgName;
+            Storage::disk(config('disks.public'))->put('public/' . $path, file_get_contents($image));
         }
         return $path;
     }

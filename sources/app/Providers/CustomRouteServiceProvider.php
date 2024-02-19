@@ -26,6 +26,7 @@ class CustomRouteServiceProvider extends ServiceProvider
 
     private function loadRoutes () {
         $controllersPath = app_path('Http/Controllers/Office');
+        $ignoreArr = [];
 
         if(File::isDirectory($controllersPath)) {
             $controllers = File::allFiles($controllersPath);
@@ -35,8 +36,13 @@ class CustomRouteServiceProvider extends ServiceProvider
                 $class = $controller->getBasename('.php');
                 $routerName = str_replace('Controller', '', $class);
 
+                if(in_array($routerName, $ignoreArr)) {
+                    continue;
+                }
+
                 if (class_exists($namespace . $class) && !empty($routerName)) {
                     $prefix = strtolower($routerName);
+
                     Route::prefix('/office/' . $prefix)->group(function () use ($namespace, $class, $prefix) {
                         Route::middleware(['web', 'auth'])->group(function () use ($namespace, $class, $prefix) {
                             Route::get('/index', [$namespace . $class, 'index'])->name($prefix . '.index');

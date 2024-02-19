@@ -1,8 +1,22 @@
 <?php
-namespace App\Constants\Forms\StructionPage;
+namespace App\Constants\Forms\Posttype;
 
-class HomeConstant {
-    public const SLIDER_TOP = [
+class ProductConstant {
+    public const CODE = 'product';
+    public const NAME = 'Product';
+
+    public const LIST = [
+        [
+            'key' => 'title',
+            'name' => 'Title'
+        ],
+        [
+            'key' => 'image',
+            'name' => 'Image'
+        ],
+    ];
+    public const SEARCH = [];
+    public const FORM = [
         [
             'type' => 'text',
             'name' => 'title',
@@ -45,34 +59,5 @@ class HomeConstant {
             ],
         ],
     ];
-
-    public const HOME_STORY = [
-        [
-            'type' => 'text',
-            'name' => 'title',
-            'label' => 'Title',
-            'value' => '',
-            'validate' => [
-                'rules' => 'required'
-            ],
-        ],
-        [
-            'type' => 'image',
-            'name' => 'image',
-            'label' => 'Image',
-            'value' => [],
-            'validate' => [
-                'rules' => 'required'
-            ]
-        ],
-        [
-            'type' => 'textarea',
-            'name' => 'summary',
-            'label' => 'Sumary',
-            'value' => '',
-            'validate' => [
-                'rules' => 'required'
-            ],
-        ],
-    ];
+    public const TAXONOMY = [];
 }

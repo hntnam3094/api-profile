@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Constants\PostTypeConstant;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -33,7 +35,8 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
-            ],
+                'posttype' => DB::table('post_type')->get()
+            ]
         ];
     }
 }

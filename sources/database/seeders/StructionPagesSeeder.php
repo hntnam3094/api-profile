@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Constants\FormConstant;
 use App\Models\StructionPages;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StructionPagesSeeder extends Seeder
