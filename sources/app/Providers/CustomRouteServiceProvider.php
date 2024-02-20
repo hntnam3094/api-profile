@@ -48,9 +48,9 @@ class CustomRouteServiceProvider extends ServiceProvider
                             Route::get('/index', [$namespace . $class, 'index'])->name($prefix . '.index');
                             Route::get('/create', [$namespace . $class, 'create'])->name($prefix . '.create');
                             Route::post('/store', [$namespace . $class, 'store'])->name($prefix . '.store');
-                            Route::get('/edit/{id}/{page_code?}/{code?}', [$namespace . $class, 'edit'])->name($prefix . '.edit');
+                            Route::get('/edit/{id}', [$namespace . $class, 'edit'])->name($prefix . '.edit');
                             Route::post('/update/{id}', [$namespace . $class, 'update'])->name($prefix . '.update');
-                            Route::get('/detail/{id}/{is_list?}/{page_code?}/{code?}', [$namespace . $class, 'show'])->name($prefix . '.detail');
+                            Route::get('/detail/{id}', [$namespace . $class, 'show'])->name($prefix . '.detail');
                             Route::delete('/delete/{id}', [$namespace . $class, 'destroy'])->name($prefix . '.delete');
                         });
                     });

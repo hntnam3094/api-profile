@@ -46,7 +46,7 @@ export default function FormAdd({
 
     function onSubmit() {
         if (id) {
-            post(route("structionpages.update", { id: id, page_code: pageCode, code: code }))
+            post(route("structionpages.update", { id: id }))
         } else {
             post(route("structionpages.store", { page_code: pageCode, code: code }))
         }

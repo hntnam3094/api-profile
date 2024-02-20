@@ -13,7 +13,8 @@ class StructionDetailRepository extends BaseRepository {
     public function getByStructionPageId ($id) {
         return $this->model->where('structionPageId', $id)
             ->orderBy('sequence', 'ASC')
-            ->orderBy('created_at', 'ASC')
-            ->paginate(CommonConstant::PAGINATION_LIMIT);
+            ->orderBy('created_at', 'DESC')
+            ->paginate(CommonConstant::PAGINATION_LIMIT)
+            ->appends(['is_list' => 1]);
     }
 }

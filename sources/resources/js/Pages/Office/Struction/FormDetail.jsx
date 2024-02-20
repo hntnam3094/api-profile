@@ -6,8 +6,6 @@ import { router } from "@inertiajs/react";
 export default function FormDetail({
     dataForm,
     structionForm,
-    pageCode,
-    code,
     id
 }) {
     const {
@@ -19,7 +17,7 @@ export default function FormDetail({
     } = useForm({ defaultValues: dataForm });
 
     function edit () {
-        router.get(route('structionpages.edit', {id: id, 'is_list': 0, 'page_code': pageCode, 'code': code }))
+        router.get(route('structionpages.edit', {id: id, 'is_list': 0 }))
     }
 
     return (

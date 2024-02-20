@@ -62,6 +62,9 @@ class PosttypeController extends Controller
     {
         list($dataForm, $form, $postType) = $this->postTypeService->getDataFormById($id);
 
+        if (empty($dataForm)) {
+            abort(404);
+        }
         return Inertia::render('Office/Posttype/FormDetail', [
             'dataForm' => $dataForm,
             'form' => $form,
@@ -76,7 +79,9 @@ class PosttypeController extends Controller
     public function edit(string $id)
     {
         list($dataForm, $form, $postType) = $this->postTypeService->getDataFormById($id);
-
+        if (empty($dataForm)) {
+            abort(404);
+        }
         return Inertia::render('Office/Posttype/FormAdd', [
             'dataForm' => $dataForm,
             'form' => $form,

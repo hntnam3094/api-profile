@@ -15,47 +15,62 @@ class PostTypeService {
     private $postTypeRepository;
     private $postDetailRepository;
     private $postMetaRepository;
+    private $commonService;
 
-    public function __construct(PostTypeRepository $postTypeRepository, PostDetailRepository $postDetailRepository, PostMetaRepository $postMetaRepository)
+    public function __construct (
+        PostTypeRepository $postTypeRepository,
+        PostDetailRepository $postDetailRepository,
+        PostMetaRepository $postMetaRepository,
+        CommonService $commonService)
     {
         $this->postTypeRepository = $postTypeRepository;
         $this->postDetailRepository = $postDetailRepository;
         $this->postMetaRepository = $postMetaRepository;
+        $this->commonService = $commonService;
     }
 
     public function getPaginationByPostType ($postType) {
-        $listPostDetail = $this->postTypeRepository->getPaginationByPostType($postType);
-        $listField = $this->getKeyOfFieldList($postType);
+        if (!empty($postType)) {
+            $listPostDetail = $this->postTypeRepository->getPaginationByPostType($postType);
+            $listField = $this->getKeyOfFieldList($postType);
 
-        if (count($listPostDetail) > 0) {
-            foreach ($listPostDetail as &$postDetail) {
-                $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id, $listField);
-                if (!empty($postMeta)) {
-                    foreach ($postMeta as $meta) {
-                        if ($meta->metaKey == CommonConstant::IMAGE) {
-                            $meta->metaValue = Storage::url($meta->metaValue);
+            if (count($listPostDetail) > 0) {
+                foreach ($listPostDetail as &$postDetail) {
+                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id, $listField);
+                    if (!empty($postMeta)) {
+                        foreach ($postMeta as $meta) {
+                            if ($meta->metaKey == CommonConstant::IMAGE) {
+                                $meta->metaValue = Storage::url($meta->metaValue);
+                            }
+                            $postDetail[$meta->metaKey] = $meta->metaValue;
                         }
-                        $postDetail[$meta->metaKey] = $meta->metaValue;
                     }
                 }
             }
-        }
 
-        return $listPostDetail;
+            return $listPostDetail;
+        }
+        return [];
     }
 
     public function getDataFormById ($id) {
-        $postDetail = $this->postDetailRepository->find($id);
-        $postType = $this->postTypeRepository->find($postDetail->postTypeId)->code ?? '';
-        $postDetailId = $postDetail->id ?? 0;
-        $form = PostTypeConstant::getForm($postType);
-        $dataForm = [];
-        if (!empty($postDetailId)) {
-            $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id);
-            $dataForm = $this->getKeyValueByMeta($postMeta, $postDetail);
-        }
+        if ($id) {
+            $postDetail = $this->postDetailRepository->find($id);
+            if (!empty($postDetail)) {
+                $postType = $this->postTypeRepository->find($postDetail->postTypeId)->code ?? '';
+                $postDetailId = $postDetail->id ?? 0;
+                $form = PostTypeConstant::getForm($postType);
+                $dataForm = [];
 
-        return [$dataForm, $form, $postType];
+                if (!empty($postDetailId)) {
+                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id);
+                    $dataForm = $this->getKeyValueByMeta($postMeta, $postDetail);
+                }
+
+                return [$dataForm, $form, $postType];
+            }
+        }
+        return [];
     }
 
     private function getKeyValueByMeta ($metaData, $postDetail = null) {
@@ -129,12 +144,12 @@ class PostTypeService {
                     }
 
                     if ($key === CommonConstant::IMAGE) {
-                        $value = $this->saveImages($value);
+                        $value = $this->commonService->saveImages($value);
                     }
 
                     if ($key === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
-                            $val['image'] = $this->saveImages($val['image']);
+                            $val['image'] = $this->commonService->saveImages($val['image']);
                         }
 
                         $value = json_encode($value);
@@ -156,17 +171,6 @@ class PostTypeService {
         }
     }
 
-    private function saveImages ($value) {
-        $path = '';
-        if ($value && $value[0] && gettype($value[0]) != 'string') {
-            $image = $value[0];
-            $imgName = time() . time().rand(100,999) . '.' . $image->getClientOriginalExtension();
-            $path = 'struction/' . Carbon::now()->format('Ymd') . '/' . $imgName;
-            Storage::disk(config('disks.public'))->put('public/' . $path, file_get_contents($image));
-        }
-        return $path;
-    }
-
     private function getAttributeAndPostType ($attr) {
         $postType = $attr['posttype'];
         unset($attr['posttype']);
@@ -175,11 +179,13 @@ class PostTypeService {
     }
 
     private function getKeyOfFieldList ($postType) {
-        $arr = PostTypeConstant::getForm($postType, false, PostTypeConstant::fieldList);
         $newArr = [];
-        if (count($arr) > 0) {
-            foreach($arr as $item) {
-                $newArr[] = $item['key'];
+        if ($postType) {
+            $arr = PostTypeConstant::getForm($postType, false, PostTypeConstant::fieldList);
+            if (count($arr) > 0) {
+                foreach($arr as $item) {
+                    $newArr[] = $item['key'];
+                }
             }
         }
 

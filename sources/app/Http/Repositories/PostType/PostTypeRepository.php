@@ -26,7 +26,8 @@ class PostTypeRepository extends BaseRepository {
                         ->orderBy('post_detail.sequence', 'ASC')
                         ->orderBy('post_detail.created_at', 'DESC')
                         ->select('post_detail.*')
-                        ->paginate(CommonConstant::PAGINATION_LIMIT);
+                        ->paginate(CommonConstant::PAGINATION_LIMIT)
+                        ->appends(['posttype' => $postType]);
 
         return $record;
     }

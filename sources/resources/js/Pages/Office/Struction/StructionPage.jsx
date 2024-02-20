@@ -10,7 +10,7 @@ export default function StructionPage({ data, islist, pageCode, code }) {
 
     function deleteStructionDetail(id) {
         if (confirm("Are you sure?") == true) {
-            router.delete(route('structionpages.delete', {id: id, page_code: pageCode, code: code}))
+            router.delete(route('structionpages.delete', {id: id}))
         }
     }
 
@@ -85,13 +85,7 @@ export default function StructionPage({ data, islist, pageCode, code }) {
                                     <HasLink
                                         link={route("structionpages.detail", {
                                             id: item.id,
-                                            is_list: islist,
-                                            page_code:
-                                                islist == 1
-                                                    ? item.pageCode
-                                                    : pageCode,
-                                            code:
-                                                islist == 1 ? item.code : code,
+                                            is_list: islist
                                         })}
                                     >
                                         <ViewIcon />
@@ -99,9 +93,7 @@ export default function StructionPage({ data, islist, pageCode, code }) {
                                     {!islist && (
                                         <HasLink
                                             link={route("structionpages.edit", {
-                                                id: item.id,
-                                                page_code: pageCode,
-                                                code: code,
+                                                id: item.id
                                             })}
                                             color="warning"
                                         >

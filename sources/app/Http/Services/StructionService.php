@@ -14,16 +14,19 @@ class StructionService {
     private $structionPagesRepository;
     private $structionDetailsRepository;
     private $structionMetaRepository;
+    private $commonService;
 
     public function __construct(
         StructionPageRepository $structionPagesRepository,
         StructionDetailRepository $structionDetailRepository,
-        StructionMetaRepository $structionMetaRepository
+        StructionMetaRepository $structionMetaRepository,
+        CommonService $commonService
         )
     {
         $this->structionPagesRepository = $structionPagesRepository;
         $this->structionDetailsRepository = $structionDetailRepository;
         $this->structionMetaRepository = $structionMetaRepository;
+        $this->commonService = $commonService;
     }
 
     public function getStructionPagePaginations () {
@@ -35,7 +38,10 @@ class StructionService {
     }
 
     public function getStructionDetailByStructionPageId ($id) {
-        return $this->structionDetailsRepository->getByStructionPageId($id);
+        $structionDetail = $this->structionDetailsRepository->getByStructionPageId($id);
+        $structionPage = $this->structionPagesRepository->find($id);
+
+        return [$structionDetail, $structionPage->code, $structionPage->pageCode];
     }
 
     public function getStructionMetaByStructionDetailId ($id) {
@@ -52,6 +58,32 @@ class StructionService {
 
     public function deleteStructionDetailById ($id) {
         return $this->structionDetailsRepository->delele($id);
+    }
+
+    public function getStructionDetailAndCodeAndPageCodeByStructionDetailId ($id) {
+        if ($id) {
+            $structionDetail = $this->structionDetailsRepository->find($id);
+
+            if (!empty($structionDetail)) {
+                $structionPage = $this->structionPagesRepository->find($structionDetail->structionPageId);
+
+                return [$structionDetail, $structionPage->code, $structionPage->pageCode];
+            }
+        }
+        return [];
+    }
+
+    public function getStructionPageIdByStructionDetailId ($id) {
+        if ($id) {
+            $structionDetail = $this->structionDetailsRepository->find($id);
+            if (!empty($structionDetail)) {
+                $structionPage = $this->structionPagesRepository->find($structionDetail->structionPageId);
+
+                return $structionPage->id;
+            }
+        }
+
+        return 0;
     }
 
     public function save ($attr, $id = 0) {
@@ -81,12 +113,12 @@ class StructionService {
                     }
 
                     if ($key === CommonConstant::IMAGE) {
-                        $value = $this->saveImages($value);
+                        $value = $this->commonService->saveImages($value);
                     }
 
                     if ($key === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
-                            $val['image'] = $this->saveImages($val['image']);
+                            $val['image'] = $this->commonService->saveImages($val['image']);
                         }
 
                         $value = json_encode($value);
@@ -106,17 +138,6 @@ class StructionService {
             DB::rollBack();
             dd($e->getMessage());
         }
-    }
-
-    private function saveImages ($value) {
-        $path = '';
-        if ($value && $value[0] && gettype($value[0]) != 'string') {
-            $image = $value[0];
-            $imgName = time() . time().rand(100,999) . '.' . $image->getClientOriginalExtension();
-            $path = 'struction/' . Carbon::now()->format('Ymd') . '/' . $imgName;
-            Storage::disk(config('disks.public'))->put('public/' . $path, file_get_contents($image));
-        }
-        return $path;
     }
 
     private function getPageCodeAndCode ($attr) {

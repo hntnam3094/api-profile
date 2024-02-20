@@ -67,21 +67,22 @@ class StructionPagesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show ($id, $is_list, $page_code, $code)
+    public function show (Request $request, $id)
     {
+        $is_list = $request->get('is_list');
         if ($is_list) {
-            $data = $this->structionService->getStructionDetailByStructionPageId($id);
+            list($data, $code, $page_code) = $this->structionService->getStructionDetailByStructionPageId($id);
 
             return Inertia::render('Office/Struction/StructionPage', [
                 'data' => $data,
                 'islist' => 0,
                 'pageCode' => $page_code,
-                'code' => $code
+                'code' => $code,
             ]);
         }
 
         $metaData = $this->structionService->getStructionMetaByStructionDetailId($id);
-        $structionDetailRecord = $this->structionService->getStructionDetailById($id);
+        list($structionDetailRecord, $code, $page_code) = $this->structionService->getStructionDetailAndCodeAndPageCodeByStructionDetailId($id);
 
         if (empty($metaData)) {
             abort(404);
@@ -93,8 +94,6 @@ class StructionPagesController extends Controller
         return Inertia::render('Office/Struction/FormDetail', [
             'dataForm' => $data,
             'structionForm' => $structionForm,
-            'pageCode' => $page_code,
-            'code' => $code,
             'id' => $id,
             'structionPageId' => $structionDetailRecord->structionPageId ?? 0
         ]);
@@ -104,10 +103,10 @@ class StructionPagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit (string $id, $page_code, $code)
+    public function edit (string $id)
     {
         $metaData = $this->structionService->getStructionMetaByStructionDetailId($id);
-        $structionDetailRecord = $this->structionService->getStructionDetailById($id);
+        list($structionDetailRecord, $code, $page_code) = $this->structionService->getStructionDetailAndCodeAndPageCodeByStructionDetailId($id);
         if (empty($metaData)) {
             abort(404);
         }
@@ -119,8 +118,6 @@ class StructionPagesController extends Controller
             'dataForm' => $data,
             'structionForm' => $structionForm,
             'id' => $id,
-            'pageCode' => $page_code,
-            'code' => $code,
             'structionPageId' => $structionDetailRecord->structionPageId
         ]);
     }
@@ -130,12 +127,10 @@ class StructionPagesController extends Controller
      */
     public function update(StructionRequest $request, string $id)
     {
-        $pageCode = $request->get('page_code');
-        $code = $request->get('code');
-        $structionPageId = $this->structionService->getStructionPageByPageCodeAndCode($pageCode, $code);
+        $structionPageId = $this->structionService->getStructionPageIdByStructionDetailId($id);
 
         $this->structionService->save($request->all(), $id);
-        return redirect()->to(route('structionpages.detail', ['id' => $structionPageId, 'is_list' => 1, 'page_code' => $pageCode, 'code' => $code]));
+        return redirect()->to(route('structionpages.detail', ['id' => $structionPageId, 'is_list' => 1]));
     }
 
     /**
@@ -147,6 +142,6 @@ class StructionPagesController extends Controller
         $structionPageRecord = $this->structionService->getStructionPageById($structionDetailRecord->structionPageId);
 
         $this->structionService->deleteStructionDetailById($id);
-        return redirect()->to(route('structionpages.detail', ['id' => $structionPageRecord->id, 'is_list' => 1, 'page_code' => $structionPageRecord->pageCode, 'code' => $structionPageRecord->code]));
+        return redirect()->to(route('structionpages.detail', ['id' => $structionPageRecord->id, 'is_list' => 1]));
     }
 }
