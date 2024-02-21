@@ -3,6 +3,7 @@ namespace App\Http\Services;
 
 use App\Constants\CommonConstant;
 use App\Constants\PostTypeConstant;
+use App\Http\Repositories\PostMapCategory\PostMapCategoryRepository;
 use App\Http\Repositories\PostType\PostDetailRepository;
 use App\Http\Repositories\PostType\PostMetaRepository;
 use App\Http\Repositories\PostType\PostTypeRepository;
@@ -15,17 +16,20 @@ class PostTypeService {
     private $postTypeRepository;
     private $postDetailRepository;
     private $postMetaRepository;
+    private $postMapCategoryRepository;
     private $commonService;
 
     public function __construct (
         PostTypeRepository $postTypeRepository,
         PostDetailRepository $postDetailRepository,
         PostMetaRepository $postMetaRepository,
+        PostMapCategoryRepository $postMapCategoryRepository,
         CommonService $commonService)
     {
         $this->postTypeRepository = $postTypeRepository;
         $this->postDetailRepository = $postDetailRepository;
         $this->postMetaRepository = $postMetaRepository;
+        $this->postMapCategoryRepository = $postMapCategoryRepository;
         $this->commonService = $commonService;
     }
 
@@ -63,8 +67,7 @@ class PostTypeService {
                 $dataForm = [];
 
                 if (!empty($postDetailId)) {
-                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id);
-                    $dataForm = $this->getKeyValueByMeta($postMeta, $postDetail);
+                    $dataForm = $this->getKeyValueByMeta($postDetail->postMeta, $postDetail);
                 }
 
                 return [$dataForm, $form, $postType];
@@ -153,6 +156,13 @@ class PostTypeService {
                         }
 
                         $value = json_encode($value);
+                    }
+
+                    if ($key === PostTypeConstant::fieldCategory) {
+                        $this->postMapCategoryRepository->create([
+                            'postId' => $id,
+                            'categoryId' => $value
+                        ]);
                     }
 
                     $this->postMetaRepository->create([

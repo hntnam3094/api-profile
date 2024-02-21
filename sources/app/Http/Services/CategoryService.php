@@ -33,7 +33,7 @@ class CategoryService {
 
             if (count($listCategory) > 0) {
                 foreach ($listCategory as &$categoryDetail) {
-                    $postMeta = $this->categoryMetaReposioty->getByPostDetailId($categoryDetail->id, $listField);
+                    $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail->id, $listField);
                     if (!empty($postMeta)) {
                         foreach ($postMeta as $meta) {
                             if ($meta->metaKey == CommonConstant::IMAGE) {
@@ -54,13 +54,13 @@ class CategoryService {
     public function getDataFormById ($id) {
         if ($id) {
             $category = $this->categoryRepository->find($id);
+
             if (!empty($category)) {
                 $postType = $category->postType;
-                $form = PostTypeConstant::getForm($postType);
+                $form = PostTypeConstant::getForm($postType, $id);
                 $dataForm = [];
 
-                $postMeta = $this->categoryMetaReposioty->getByPostDetailId($id);
-                $dataForm = $this->getKeyValueByMeta($postMeta, $category);
+                $dataForm = $this->getKeyValueByMeta($category->categoryMeta, $category);
 
                 return [$dataForm, $form, $postType];
             }
@@ -70,10 +70,14 @@ class CategoryService {
 
     public function deleteCategoryById ($id) {
         if ($id) {
+            $categoryRecord = $this->categoryRepository->find($id);
+            $postType = $categoryRecord->postType;
+
             $this->categoryRepository->delele($id);
 
-            $this->categoryMetaReposioty->deleteByCategoryId($id);
+            return $postType;
         }
+        return '';
     }
 
     public function save ($attr, $id = 0) {
@@ -96,6 +100,9 @@ class CategoryService {
                 foreach ($attr as $key => $value) {
 
                     if(in_array($key, $structionPageField)) {
+                        if (($key == 'parentId' && empty($value)) || ($value == $id)) {
+                            $value = 0;
+                        }
                         $this->categoryRepository->update($id, [$key => $value]);
                         continue;
                     }

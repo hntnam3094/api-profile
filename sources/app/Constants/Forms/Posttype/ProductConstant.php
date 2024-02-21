@@ -72,6 +72,17 @@ class ProductConstant {
                 'rules' => 'required'
             ],
         ],
+        [
+            'type' => 'select',
+            'name' => PostTypeConstant::fieldCategory,
+            'label' => 'Category',
+            'value' => '',
+            'option' => PostTypeConstant::listTreeCategory,
+            'metaValue' => 'title',
+            'validate' => [
+                'rules' => 'required'
+            ],
+        ],
     ];
     public const CATEGORY = [
         [
@@ -98,11 +109,9 @@ class ProductConstant {
             'name' => 'parentId',
             'label' => 'Parent Category',
             'value' => '',
-            'option' => PostTypeConstant::listCategory,
+            'option' => PostTypeConstant::listTreeCategory,
             'metaValue' => 'title',
-            'validate' => [
-                'rules' => 'required'
-            ],
+            'validate' => [],
         ],
     ];
 }

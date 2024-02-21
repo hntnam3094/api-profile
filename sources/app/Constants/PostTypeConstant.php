@@ -59,11 +59,11 @@ class PostTypeConstant {
         if (!empty($formByCode[self::fieldCategory])) {
             foreach ($formByCode[self::fieldCategory] as &$category) {
                 if (!empty($category['option'])) {
-                    // if ($category['option'] == self::listCategory) {
-                    //     $category['option'] = self::getCategoriesByPostType($formByCode[self::code], $category['metaValue']);
-                    // }
-
                     if ($category['option'] == self::listCategory) {
+                        $category['option'] = self::getCategoriesByPostType($formByCode[self::code], $category['metaValue']);
+                    }
+
+                    if ($category['option'] == self::listTreeCategory) {
                         $options = [
                             [
                                 'key' => '',
@@ -72,6 +72,35 @@ class PostTypeConstant {
                         ];
 
                         $category['option'] = self::getTreeCategoriesByPostType($formByCode[self::code], $category['metaValue'], $options);
+                    }
+
+                    if (gettype($category['option']) != 'array') {
+                        $category['option'] = [];
+                    }
+                }
+            }
+        }
+
+        if (!empty($formByCode[self::fieldForm])) {
+            foreach ($formByCode[self::fieldForm] as &$category) {
+                if (!empty($category['option'])) {
+                    if ($category['option'] == self::listCategory) {
+                        $category['option'] = self::getCategoriesByPostType($formByCode[self::code], $category['metaValue']);
+                    }
+
+                    if ($category['option'] == self::listTreeCategory) {
+                        $options = [
+                            [
+                                'key' => '',
+                                'value' => '- Select -'
+                            ]
+                        ];
+
+                        $category['option'] = self::getTreeCategoriesByPostType($formByCode[self::code], $category['metaValue'], $options);
+                    }
+
+                    if (gettype($category['option']) != 'array') {
+                        $category['option'] = [];
                     }
                 }
             }

@@ -14,7 +14,7 @@ class CategoryMetaRepository extends BaseRepository {
         return $this->model->where('categoryId', $id)->delete();
     }
 
-    public function getByPostDetailId ($id, $key = []) {
+    public function getByCategoryId ($id, $key = []) {
         $query = $this->model->where('categoryId', $id);
         if (!empty($key)) {
             $query->whereIn('metaKey', $key);

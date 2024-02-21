@@ -123,6 +123,7 @@ function HasTextInput({ form, register, className, isDetail }) {
 
 function HasSelect({ form, register, className, isDetail }) {
     return (
+
         <Select id={form.name} {...register(form.name)} className={className} disabled={isDetail}>
             {form.option.map((item, key) => (
                 <option key={key} value={item.key}>

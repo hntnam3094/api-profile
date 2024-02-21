@@ -107,6 +107,9 @@ class CategoryController extends Controller
     {
         $postType = $this->categoryService->deleteCategoryById($id);
 
-        return redirect()->to(route('category.index', ['posttype' => $postType]));
+        if ($postType) {
+            return redirect()->to(route('category.index', ['posttype' => $postType]));
+        }
+        return redirect()->to(route('dashboard'));
     }
 }

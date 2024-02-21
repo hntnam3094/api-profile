@@ -11,4 +11,22 @@ class PostDetail extends Model
 
     protected $table = 'post_detail';
     protected $fillable = ['postTypeId', 'status', 'sequence'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($postDetail) {
+            $postDetail->postMapCategory()->delete();
+            $postDetail->postMeta()->delete();
+        });
+    }
+
+    public function postMapCategory () {
+        return $this->hasOne(PostMapCategory::class, 'postId', 'id');
+    }
+
+    public function postMeta () {
+        return $this->hasMany(PostMeta::class, 'postDetailId', 'id');
+    }
 }
