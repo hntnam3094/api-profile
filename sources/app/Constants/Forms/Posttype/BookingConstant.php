@@ -4,8 +4,19 @@ namespace App\Constants\Forms\Posttype;
 class BookingConstant {
     public const CODE = 'booking';
     public const NAME = 'Booking';
+    public const HAS_CATEGORY = 1;
 
     public const LIST = [
+        [
+            'key' => 'title',
+            'name' => 'Title'
+        ],
+        [
+            'key' => 'image',
+            'name' => 'Image'
+        ],
+    ];
+    public const LIST_CATEGORY = [
         [
             'key' => 'title',
             'name' => 'Title'
@@ -59,5 +70,5 @@ class BookingConstant {
             ],
         ],
     ];
-    public const TAXONOMY = [];
+    public const CATEGORY = [];
 }

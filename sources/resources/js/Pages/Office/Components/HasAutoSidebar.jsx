@@ -3,8 +3,8 @@ export default function HasAutoSidebar(props) {
         <>
             {props.posttype &&
                 props.posttype.length > 0 &&
-                props.posttype.map((item) => (
-                    <>
+                props.posttype.map((item, index) => (
+                    <div key={index}>
                         <li className="px-5">
                             <div className="flex flex-row items-center h-8">
                                 <div className="text-sm font-light tracking-wide text-gray-500">
@@ -58,10 +58,10 @@ export default function HasAutoSidebar(props) {
                                 </span>
                             </a>
                         </li>
-                        {/* {item.taxonomy.length > 0 && (
+                        {item.hasCategory > 0 && (
                             <li className="ml-2">
                                 <a
-                                    href={route("dashboard")}
+                                    href={route("category.index",  {'posttype' : item.code})}
                                     className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6"
                                 >
                                     <span className="inline-flex justify-center items-center ml-4">
@@ -82,8 +82,8 @@ export default function HasAutoSidebar(props) {
                                     </span>
                                 </a>
                             </li>
-                        )} */}
-                    </>
+                        )}
+                    </div>
                 ))}
         </>
     );
