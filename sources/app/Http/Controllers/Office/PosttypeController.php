@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Office;
 
-use App\Constants\PostTypeConstant;
 use App\Http\Controllers\Controller;
+use App\Http\Forms\PostType\PostTypeForm;
 use App\Http\Requests\PostTypeRequest;
 use App\Http\Services\PostTypeService;
 use Illuminate\Http\Request;
@@ -12,10 +12,12 @@ use Inertia\Inertia;
 class PosttypeController extends Controller
 {
     private $postTypeService;
+    private $postTypeForm;
 
-    public function __construct(PostTypeService $postTypeService)
+    public function __construct(PostTypeService $postTypeService, PostTypeForm $postTypeForm)
     {
         $this->postTypeService = $postTypeService;
+        $this->postTypeForm = $postTypeForm;
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +29,7 @@ class PosttypeController extends Controller
         return Inertia::render('Office/Posttype/PosttypeList', [
             'data' => $data,
             'posttype' => $postType,
-            'form' => PostTypeConstant::getForm($postType)
+            'form' => $this->postTypeForm->getForm($postType)
         ]);
     }
 
@@ -37,7 +39,7 @@ class PosttypeController extends Controller
     public function create(Request $request)
     {
         $postType = $request->get('posttype');
-        $form = PostTypeConstant::getForm($postType);
+        $form = $this->postTypeForm->getForm($postType);
 
         return Inertia::render('Office/Posttype/FormAdd', [
             'dataForm' => [],

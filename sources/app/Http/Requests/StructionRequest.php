@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Constants\FormConstant;
+use App\Http\Forms\StructionPage\StructionForm;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -16,12 +17,13 @@ class StructionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $structionForm = new StructionForm();
         $validator = [];
         $pageCode = $this->input('page_code');
         $code = $this->input('code');
 
         if (!empty($pageCode) && !empty($code)) {
-            $structionForm = FormConstant::getForm($pageCode, $code);
+            $structionForm = $structionForm->getForm($pageCode, $code);
 
             foreach($structionForm as $field) {
                 $validator[$field['name']] = $field['validate']['rules'] ?? [];

@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Constants\Forms\Posttype\BookingConstant;
-use App\Constants\Forms\Posttype\ProductConstant;
+use App\Constants\PostTypeConstant;
 use App\Models\PostType;
 use Illuminate\Database\Seeder;
 
@@ -18,14 +17,14 @@ class PostTypeSeeder extends Seeder
 
         PostType::insert([
             [
-                'code' => ProductConstant::CODE,
-                'name' => ProductConstant::NAME,
-                'hasCategory' => ProductConstant::HAS_CATEGORY,
+                'code' => PostTypeConstant::PRODUCT_CODE,
+                'name' => PostTypeConstant::PRODUCT_NAME,
+                'hasCategory' => PostTypeConstant::PRODUCT_CATEGORY,
             ],
             [
-                'code' => BookingConstant::CODE,
-                'name' => BookingConstant::NAME,
-                'hasCategory' => ProductConstant::HAS_CATEGORY,
+                'code' => PostTypeConstant::BOOKING_CODE,
+                'name' => PostTypeConstant::BOOKING_NAME,
+                'hasCategory' => PostTypeConstant::BOOKING_CATEGORY,
             ]
         ]);
     }

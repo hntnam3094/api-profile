@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Office;
 
 use App\Constants\FormConstant;
 use App\Http\Controllers\Controller;
+use App\Http\Forms\StructionPage\StructionForm;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -14,7 +15,8 @@ class SampleFormController extends Controller
      */
     public function index()
     {
-        $form = FormConstant::getForm(FormConstant::SAMPLE);
+        $structionForm = new StructionForm();
+        $form = $structionForm->getForm(FormConstant::SAMPLE);
         return Inertia::render('Office/Sample/SamplePage', [
             'form' => $form
         ]);

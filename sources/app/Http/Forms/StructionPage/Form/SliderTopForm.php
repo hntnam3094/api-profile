@@ -1,8 +1,13 @@
 <?php
-namespace App\Constants\Forms\StructionPage;
+namespace App\Http\Forms\StructionPage\Form;
 
-class HomeConstant {
-    public const SLIDER_TOP = [
+use App\Constants\FormConstant;
+
+class SliderTopForm {
+    public $pageCode = FormConstant::HOME;
+    public $code = FormConstant::HOME_SLIDER;
+
+    public $form = [
         [
             'type' => 'text',
             'name' => 'title',
@@ -39,36 +44,6 @@ class HomeConstant {
             'type' => 'text',
             'name' => 'link',
             'label' => 'Link',
-            'value' => '',
-            'validate' => [
-                'rules' => 'required'
-            ],
-        ],
-    ];
-
-    public const HOME_STORY = [
-        [
-            'type' => 'text',
-            'name' => 'title',
-            'label' => 'Title',
-            'value' => '',
-            'validate' => [
-                'rules' => 'required'
-            ],
-        ],
-        [
-            'type' => 'image',
-            'name' => 'image',
-            'label' => 'Image',
-            'value' => [],
-            'validate' => [
-                'rules' => 'required'
-            ]
-        ],
-        [
-            'type' => 'textarea',
-            'name' => 'summary',
-            'label' => 'Sumary',
             'value' => '',
             'validate' => [
                 'rules' => 'required'

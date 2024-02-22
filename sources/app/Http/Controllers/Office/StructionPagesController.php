@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Office;
 
-use App\Constants\FormConstant;
 use App\Http\Controllers\Controller;
+use App\Http\Forms\StructionPage\StructionForm;
 use App\Http\Requests\StructionRequest;
 use App\Http\Services\StructionService;
 use Illuminate\Http\Request;
@@ -12,21 +12,23 @@ use Inertia\Inertia;
 class StructionPagesController extends Controller
 {
     private $structionService;
+    private $structionForm;
 
     public function __construct(
-        StructionService $structionService
+        StructionService $structionService,
+        StructionForm $structionForm
         )
     {
         $this->structionService = $structionService;
+        $this->structionForm = $structionForm;
     }
 
     public function index()
     {
         $result = $this->structionService->getStructionPagePaginations();
-
         return Inertia::render('Office/Struction/StructionPage', [
             'data' => $result,
-            'form' => FormConstant::getForm(),
+            'form' => $this->structionForm->getForm(),
             'islist' => 1
         ]);
     }
@@ -40,7 +42,7 @@ class StructionPagesController extends Controller
         $code = $request->get('code');
         $structionPageId = $this->structionService->getStructionPageByPageCodeAndCode($page_code, $code);
 
-        $structionForm = FormConstant::getForm($page_code, $code);
+        $structionForm = $this->structionForm->getForm($page_code, $code);
         return Inertia::render('Office/Struction/FormAdd', [
             'dataForm' => $this->structionService->getStructionValue($structionForm),
             'structionForm' => $structionForm,
@@ -89,7 +91,7 @@ class StructionPagesController extends Controller
         }
 
         $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetailRecord);
-        $structionForm = FormConstant::getForm($page_code, $code);
+        $structionForm = $this->structionForm->getForm($page_code, $code);
 
         return Inertia::render('Office/Struction/FormDetail', [
             'dataForm' => $data,
@@ -112,7 +114,7 @@ class StructionPagesController extends Controller
         }
 
         $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetailRecord);
-        $structionForm = FormConstant::getForm($page_code, $code);
+        $structionForm = $this->structionForm->getForm($page_code, $code);
 
         return Inertia::render('Office/Struction/FormAdd', [
             'dataForm' => $data,

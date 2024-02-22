@@ -3,6 +3,7 @@ namespace App\Http\Services;
 
 use App\Constants\CommonConstant;
 use App\Constants\PostTypeConstant;
+use App\Http\Forms\PostType\PostTypeForm;
 use App\Http\Repositories\Category\CategoryMetaRepository;
 use App\Http\Repositories\Category\CategoryRepository;
 use Exception;
@@ -13,16 +14,19 @@ class CategoryService {
     private $categoryRepository;
     private $categoryMetaReposioty;
     private $commonService;
+    private $postTypeForm;
 
     public function __construct(
         CategoryRepository $categoryRepository,
         CategoryMetaRepository $categoryMetaReposioty,
-        CommonService $commonService
+        CommonService $commonService,
+        PostTypeForm $postTypeForm
     )
     {
         $this->categoryRepository = $categoryRepository;
         $this->categoryMetaReposioty = $categoryMetaReposioty;
         $this->commonService = $commonService;
+        $this->postTypeForm = $postTypeForm;
     }
 
     public function getPaginationsByPostType ($postType) {
@@ -57,7 +61,7 @@ class CategoryService {
 
             if (!empty($category)) {
                 $postType = $category->postType;
-                $form = PostTypeConstant::getForm($postType, $id);
+                $form = $this->postTypeForm->getForm($postType, $id);
                 $dataForm = [];
 
                 $dataForm = $this->getKeyValueByMeta($category->categoryMeta, $category);
@@ -113,7 +117,7 @@ class CategoryService {
 
                     if ($key === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
-                            $val['image'] = $this->commonService->saveImages($val['image']);
+                            $val['image'] = $this->commonService->saveImages($val['image'] ?? '');
                         }
 
                         $value = json_encode($value);
@@ -145,7 +149,7 @@ class CategoryService {
     private function getKeyOfFieldList ($postType) {
         $newArr = [];
         if ($postType) {
-            $arr = PostTypeConstant::getForm($postType, false, PostTypeConstant::fieldCategoryList);
+            $arr = $this->postTypeForm->getForm($postType, false, PostTypeConstant::fieldCategoryList);
             if (count($arr) > 0) {
                 foreach($arr as $item) {
                     $newArr[] = $item['key'];

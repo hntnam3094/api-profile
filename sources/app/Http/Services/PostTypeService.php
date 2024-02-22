@@ -3,6 +3,7 @@ namespace App\Http\Services;
 
 use App\Constants\CommonConstant;
 use App\Constants\PostTypeConstant;
+use App\Http\Forms\PostType\PostTypeForm;
 use App\Http\Repositories\PostMapCategory\PostMapCategoryRepository;
 use App\Http\Repositories\PostType\PostDetailRepository;
 use App\Http\Repositories\PostType\PostMetaRepository;
@@ -18,19 +19,22 @@ class PostTypeService {
     private $postMetaRepository;
     private $postMapCategoryRepository;
     private $commonService;
+    private $postTypeForm;
 
     public function __construct (
         PostTypeRepository $postTypeRepository,
         PostDetailRepository $postDetailRepository,
         PostMetaRepository $postMetaRepository,
         PostMapCategoryRepository $postMapCategoryRepository,
-        CommonService $commonService)
+        CommonService $commonService,
+        PostTypeForm $postTypeForm)
     {
         $this->postTypeRepository = $postTypeRepository;
         $this->postDetailRepository = $postDetailRepository;
         $this->postMetaRepository = $postMetaRepository;
         $this->postMapCategoryRepository = $postMapCategoryRepository;
         $this->commonService = $commonService;
+        $this->postTypeForm = $postTypeForm;
     }
 
     public function getPaginationByPostType ($postType) {
@@ -63,7 +67,7 @@ class PostTypeService {
             if (!empty($postDetail)) {
                 $postType = $this->postTypeRepository->find($postDetail->postTypeId)->code ?? '';
                 $postDetailId = $postDetail->id ?? 0;
-                $form = PostTypeConstant::getForm($postType);
+                $form = $this->postTypeForm->getForm($postType);
                 $dataForm = [];
 
                 if (!empty($postDetailId)) {
@@ -152,7 +156,7 @@ class PostTypeService {
 
                     if ($key === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
-                            $val['image'] = $this->commonService->saveImages($val['image']);
+                            $val['image'] = $this->commonService->saveImages($val['image'] ?? '');
                         }
 
                         $value = json_encode($value);
@@ -191,7 +195,7 @@ class PostTypeService {
     private function getKeyOfFieldList ($postType) {
         $newArr = [];
         if ($postType) {
-            $arr = PostTypeConstant::getForm($postType, false, PostTypeConstant::fieldList);
+            $arr = $this->postTypeForm->getForm($postType, false, PostTypeConstant::fieldList);
             if (count($arr) > 0) {
                 foreach($arr as $item) {
                     $newArr[] = $item['key'];

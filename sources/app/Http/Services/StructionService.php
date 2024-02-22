@@ -118,7 +118,7 @@ class StructionService {
 
                     if ($key === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
-                            $val['image'] = $this->commonService->saveImages($val['image']);
+                            $val['image'] = $this->commonService->saveImages($val['image'] ?? '');
                         }
 
                         $value = json_encode($value);

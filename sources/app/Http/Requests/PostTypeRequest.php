@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Constants\PosttypeConstant;
+use App\Http\Forms\PostType\PostTypeForm;
 use Illuminate\Foundation\Http\FormRequest;
 
 class PostTypeRequest extends FormRequest
@@ -14,11 +15,12 @@ class PostTypeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $postTypeForm = new PostTypeForm();
         $validator = [];
         $postType = $this->input('posttype');
 
         if (!empty($postType)) {
-            $postTypeForm = PostTypeConstant::getForm($postType, true, PosttypeConstant::fieldForm) ?? [];
+            $postTypeForm = $postTypeForm->getForm($postType, true, PosttypeConstant::fieldForm) ?? [];
 
             foreach($postTypeForm as $field) {
                 $validator[$field['name']] = $field['validate']['rules'] ?? [];

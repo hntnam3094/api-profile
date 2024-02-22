@@ -237,12 +237,16 @@ function HasListImage({ form, register, className, watch, control, setValue, isE
       });
 
 
-    function addImage() {
-        append({
-            'image': [],
-            'link': '',
-            'alt': ''
-        })
+    function addImage(image) {
+        if (image.length > 0) {
+            append({
+                'image': [],
+                'link': '',
+                'alt': ''
+            })
+        } else {
+            alert('Please, choose your image before add new')
+        }
     }
 
     function removeImage(key) {
@@ -316,7 +320,7 @@ function HasListImage({ form, register, className, watch, control, setValue, isE
                             {key + 1 == fields.length && (
                                 <Button
                                     className="bg-green-400"
-                                    onClick={() => addImage()}
+                                    onClick={() => addImage(watch(`${form.name}.${key}.image`))}
                                 >
                                     <PlusIcon />
                                 </Button>

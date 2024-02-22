@@ -1,36 +1,16 @@
 <?php
-namespace App\Constants\Forms\Posttype;
+namespace App\Http\Forms\PostType\Form;
 
-use App\Constants\OptionConstant;
 use App\Constants\PostTypeConstant;
 
-class ProductConstant {
-    public const CODE = 'product';
-    public const NAME = 'Product';
-    public const HAS_CATEGORY = 1;
+class BookingForm {
+    public $code = PostTypeConstant::BOOKING_CODE;
+    public $name = PostTypeConstant::BOOKING_NAME;
+    public $hasCategory = PostTypeConstant::BOOKING_CATEGORY;
 
-    public const LIST = [
-        [
-            'key' => 'title',
-            'name' => 'Title'
-        ],
-        [
-            'key' => 'image',
-            'name' => 'Image'
-        ],
-    ];
-    public const LIST_CATEGORY = [
-        [
-            'key' => 'title',
-            'name' => 'Title'
-        ],
-        [
-            'key' => 'image',
-            'name' => 'Image'
-        ],
-    ];
-    public const SEARCH = [];
-    public const FORM = [
+    public $fieldSearch = [];
+
+    public $fieldForm = [
         [
             'type' => 'text',
             'name' => 'title',
@@ -84,7 +64,8 @@ class ProductConstant {
             ],
         ],
     ];
-    public const CATEGORY = [
+
+    public $fieldCategory = [
         [
             'type' => 'text',
             'name' => 'title',
@@ -112,6 +93,28 @@ class ProductConstant {
             'option' => PostTypeConstant::listTreeCategory,
             'metaValue' => 'title',
             'validate' => [],
+        ],
+    ];
+
+    public $fieldList = [
+        [
+            'key' => 'title',
+            'name' => 'Title'
+        ],
+        [
+            'key' => 'image',
+            'name' => 'Image'
+        ],
+    ];
+
+    public $fieldCategoryList = [
+        [
+            'key' => 'title',
+            'name' => 'Title'
+        ],
+        [
+            'key' => 'image',
+            'name' => 'Image'
         ],
     ];
 }

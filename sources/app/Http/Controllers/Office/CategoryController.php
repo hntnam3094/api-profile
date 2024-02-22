@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Office;
 
 use App\Constants\PostTypeConstant;
 use App\Http\Controllers\Controller;
+use App\Http\Forms\PostType\PostTypeForm;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Services\CategoryService;
 use Illuminate\Http\Request;
@@ -12,10 +13,12 @@ use Inertia\Inertia;
 class CategoryController extends Controller
 {
     private $categoryService;
+    private $postTypeForm;
 
-    public function __construct(CategoryService $categoryService)
+    public function __construct(CategoryService $categoryService, PostTypeForm $postTypeForm)
     {
         $this->categoryService = $categoryService;
+        $this->postTypeForm = $postTypeForm;
     }
     /**
      * Display a listing of the resource.
@@ -27,7 +30,7 @@ class CategoryController extends Controller
         return Inertia::render('Office/Category/CategoryList', [
             'data' => $data,
             'posttype' => $postType,
-            'form' => PostTypeConstant::getForm($postType)
+            'form' => $this->postTypeForm->getForm($postType)
         ]);
     }
 
@@ -37,7 +40,7 @@ class CategoryController extends Controller
     public function create(Request $request)
     {
         $postType = $request->get('posttype');
-        $form = PostTypeConstant::getForm($postType);
+        $form = $this->postTypeForm->getForm($postType);
 
         return Inertia::render('Office/Category/FormAdd', [
             'dataForm' => [],
