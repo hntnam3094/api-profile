@@ -7,11 +7,18 @@ use App\Constants\OptionConstant;
 class SliderTopForm {
     public $pageCode = FormConstant::HOME;
     public $code = FormConstant::HOME_SLIDER;
-    public $listShow = [
-        'title', 'image'
+    public $fieldList = [
+        [
+            'key' => 'title',
+            'name' => 'Title'
+        ],
+        [
+            'key' => 'image',
+            'name' => 'Image'
+        ],
     ];
 
-    public $searchForm = [
+    public $fieldSearch = [
         [
             'type' => 'text',
             'name' => 'title',

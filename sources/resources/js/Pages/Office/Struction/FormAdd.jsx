@@ -24,8 +24,8 @@ export default function FormAdd({
     const { data, setData, post, errors } = useFormInertial();
 
     useEffect(() => {
-        setData(buildStructionData(structionForm, dataForm));
-    }, [structionForm]);
+        setData(buildStructionData(structionForm.form, dataForm));
+    }, [structionForm.form]);
 
     useEffect(() => {
         watchRHF((value, { name, type }) => {
@@ -35,8 +35,8 @@ export default function FormAdd({
 
     function buildStructionData(structionForm, dataForm) {
         let obj = {};
-        if (structionForm && structionForm.length > 0) {
-            structionForm.forEach((ob, i) => {
+        if (structionForm.form && structionForm.form.length > 0) {
+            structionForm.form.forEach((ob, i) => {
                 obj[ob.name] = dataForm[ob.name] ?? ob.value;
             });
         }
@@ -56,7 +56,7 @@ export default function FormAdd({
         <OfficeLayout>
             <form onSubmit={handleSubmitRHF(onSubmit)}>
                 <FormGeneration
-                    form={structionForm}
+                    form={structionForm.form}
                     register={registerRHF}
                     watch={watchRHF}
                     control={controlRHF}

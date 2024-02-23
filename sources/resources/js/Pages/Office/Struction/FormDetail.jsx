@@ -23,7 +23,7 @@ export default function FormDetail({
     return (
         <OfficeLayout>
             <FormGeneration
-                    form={structionForm}
+                    form={structionForm.form}
                     register={registerRHF}
                     watch={watchRHF}
                     control={controlRHF}

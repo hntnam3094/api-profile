@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Constants\FormConstant;
+use App\Constants\StructionConstant;
 use App\Http\Forms\StructionPage\StructionForm;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
@@ -25,7 +26,7 @@ class StructionRequest extends FormRequest
         if (!empty($pageCode) && !empty($code)) {
             $structionForm = $structionForm->getForm($pageCode, $code);
 
-            foreach($structionForm as $field) {
+            foreach($structionForm[StructionConstant::fieldForm] as $field) {
                 $validator[$field['name']] = $field['validate']['rules'] ?? [];
             }
 

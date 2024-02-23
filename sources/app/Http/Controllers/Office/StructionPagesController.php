@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Office;
 
+use App\Constants\StructionConstant;
 use App\Http\Controllers\Controller;
 use App\Http\Forms\StructionPage\StructionForm;
 use App\Http\Requests\StructionRequest;
@@ -44,7 +45,7 @@ class StructionPagesController extends Controller
 
         $structionForm = $this->structionForm->getForm($page_code, $code);
         return Inertia::render('Office/Struction/FormAdd', [
-            'dataForm' => $this->structionService->getStructionValue($structionForm),
+            'dataForm' => $this->structionService->getStructionValue($structionForm[StructionConstant::fieldForm]),
             'structionForm' => $structionForm,
             'pageCode' => $page_code,
             'code' => $code,
@@ -73,7 +74,7 @@ class StructionPagesController extends Controller
     {
         $is_list = $request->get('is_list');
         if ($is_list) {
-            list($data, $code, $page_code, $listShow, $searchForm, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
+            list($data, $code, $page_code, $form, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
 
             return Inertia::render('Office/Struction/StructionPage', [
                 'id' => $id,
@@ -81,8 +82,7 @@ class StructionPagesController extends Controller
                 'islist' => 0,
                 'pageCode' => $page_code,
                 'code' => $code,
-                'listShow' => $listShow,
-                'searchForm' => $searchForm,
+                'form' => $form,
                 'params' => $defaultParams
             ]);
         }

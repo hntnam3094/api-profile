@@ -7,11 +7,19 @@ use App\Constants\OptionConstant;
 class HomeStoryForm {
     public $pageCode = FormConstant::HOME;
     public $code = FormConstant::HOME_STORY;
-    public $listShow = [
-        'title'
+
+    public $fieldList = [
+        [
+            'key' => 'title',
+            'name' => 'Title'
+        ],
+        [
+            'key' => 'image',
+            'name' => 'Image'
+        ],
     ];
 
-    public $searchForm = [
+    public $fieldSearch = [
         [
             'type' => 'text',
             'name' => 'title',

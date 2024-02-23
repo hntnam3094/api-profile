@@ -5,9 +5,11 @@ use App\Constants\OptionConstant;
 use Illuminate\Support\Facades\File;
 
 class StructionForm {
+    public $fieldSearch = 'search';
+    public $fieldForm = 'form';
+    public $fieldList = 'list';
+
     private $form = [];
-    private $listShow = [];
-    private $searchForm = [];
 
     public function __construct()
     {
@@ -28,9 +30,9 @@ class StructionForm {
                     $formInstance = new $className();
 
                     if (!empty($formInstance->pageCode) && !empty($formInstance->code)) {
-                        $this->form[$formInstance->pageCode][$formInstance->code] = $formInstance->form ?? [];
-                        $this->listShow[$formInstance->pageCode][$formInstance->code] = $formInstance->listShow ?? [];
-                        $this->searchForm[$formInstance->pageCode][$formInstance->code] = $formInstance->searchForm ?? [];
+                        $this->form[$formInstance->pageCode][$formInstance->code][$this->fieldForm] = $formInstance->form ?? [];
+                        $this->form[$formInstance->pageCode][$formInstance->code][$this->fieldList] = $formInstance->fieldList ?? [];
+                        $this->form[$formInstance->pageCode][$formInstance->code][$this->fieldSearch] = $formInstance->fieldSearch ?? [];
                     }
 
                     if (!empty($formInstance->pageCode) && empty($formInstance->code)) {
@@ -63,18 +65,10 @@ class StructionForm {
             return $formByCode;
         }
 
-        if (!empty($formByCode) && $isShowDefault) {
-            return array_merge($formByCode, $this->defautlForm);
+        if (!empty($formByCode[$this->fieldForm]) && $isShowDefault) {
+            $formByCode[$this->fieldForm] = array_merge($formByCode[$this->fieldForm], $this->defautlForm);
         }
-        return [];
-    }
-
-    public function getListShow ($pageCode = '', $code = '') {
-        return $this->listShow[$pageCode][$code] ?? [];
-    }
-
-    public function getSearchForm ($pageCode = '', $code = '') {
-        return $this->searchForm[$pageCode][$code] ?? [];
+        return $formByCode;
     }
 
     public $defautlForm = [

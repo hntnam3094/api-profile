@@ -42,7 +42,7 @@ class PostTypeService {
             $form = $this->postTypeForm->getForm($postType);
             $listField = $this->getKeyOfFieldList($postType);
             $searchFields = [];
-            if (!empty($form['search'])) {
+            if (!empty($form[PostTypeConstant::fieldSearch])) {
                 foreach ($form['search'] as $search) {
                     $searchFields[$search['name']] = $params[$search['name']] ?? $search['value'];
                 }

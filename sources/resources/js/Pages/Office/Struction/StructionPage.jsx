@@ -15,8 +15,7 @@ export default function StructionPage({
     islist,
     pageCode,
     code,
-    listShow = [],
-    searchForm = [],
+    form = [],
     params = [],
 }) {
     const {
@@ -78,7 +77,7 @@ export default function StructionPage({
                     className="flex items-center gap-x-[20px]"
                 >
                     <SearchFormGeneration
-                        form={searchForm}
+                        form={form.search}
                         register={registerRHF}
                         watch={watchRHF}
                         control={controlRHF}
@@ -86,7 +85,7 @@ export default function StructionPage({
                         setValue={setValueRHF}
                     />
 
-                    {searchForm && searchForm.length > 0 && (
+                    {form.search && form.search.length > 0 && (
                         <Button
                             type="submit"
                             color="success"
@@ -112,11 +111,11 @@ export default function StructionPage({
 
                         {!islist && (
                             <>
-                                {listShow &&
-                                    listShow.length > 0 &&
-                                    listShow.map((itemList) => (
+                                {form.list &&
+                                    form.list.length > 0 &&
+                                    form.list.map((itemList) => (
                                         <Table.HeadCell>
-                                            {itemList}
+                                            {itemList.name}
                                         </Table.HeadCell>
                                     ))}
                                 <Table.HeadCell>Status</Table.HeadCell>
@@ -148,13 +147,13 @@ export default function StructionPage({
 
                                 {!islist && (
                                     <>
-                                        {listShow &&
-                                            listShow.length > 0 &&
-                                            listShow.map((itemList) => (
+                                        {form.list &&
+                                            form.list.length > 0 &&
+                                            form.list.map((itemList) => (
                                                 <Table.Cell>
                                                     {renderField(
                                                         item,
-                                                        itemList
+                                                        itemList.key
                                                     )}
                                                 </Table.Cell>
                                             ))}

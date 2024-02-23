@@ -2,6 +2,7 @@
 namespace App\Http\Services;
 
 use App\Constants\CommonConstant;
+use App\Constants\StructionConstant;
 use App\Http\Forms\StructionPage\StructionForm;
 use App\Http\Repositories\Struction\StructionDetailRepository;
 use App\Http\Repositories\Struction\StructionMetaRepository;
@@ -44,30 +45,29 @@ class StructionService {
     public function getStructionDetailByStructionPageId ($id, $params) {
         $structionPage = $this->structionPagesRepository->find($id);
 
-        $searchForm = $this->structionForm->getSearchForm($structionPage->pageCode, $structionPage->code);
-        $listShow = $this->structionForm->getListShow($structionPage->pageCode, $structionPage->code);
+        $form = $this->structionForm->getForm($structionPage->pageCode, $structionPage->code);
 
         $searchFields = [];
-        foreach ($searchForm as $search) {
-            $searchFields[$search['name']] = $params[$search['name']] ?? $search['value'];
+        foreach ($form[StructionConstant::fieldSearch] as $search) {
+            $searchFields[$search[StructionConstant::NAME]] = $params[$search[StructionConstant::NAME]] ?? $search['value'];
         }
 
         $structionDetail = $this->structionDetailsRepository->getByStructionPageId($id, $params, $searchFields);
 
         if (!empty($structionDetail)) {
             foreach ($structionDetail as &$detail) {
-                foreach ($listShow as $show) {
-                    $meta = $this->structionMetaRepository->getByIdAndField($detail->id, $show);
+                foreach ($form[StructionConstant::fieldList] as $show) {
+                    $meta = $this->structionMetaRepository->getByIdAndField($detail->id, $show[StructionConstant::KEY]);
                     if ($meta->key === CommonConstant::IMAGE) {
                         $meta->value = Storage::url($meta->value);
 
                     }
-                    $detail[$show] = $meta->value ?? '';
+                    $detail[$show[StructionConstant::KEY]] = $meta->value ?? '';
                 }
             }
         }
 
-        return [$structionDetail, $structionPage->code, $structionPage->pageCode, $listShow, $searchForm, $searchFields];
+        return [$structionDetail, $structionPage->code, $structionPage->pageCode, $form, $searchFields];
     }
 
     public function getStructionMetaByStructionDetailId ($id) {

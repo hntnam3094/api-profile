@@ -1,11 +1,6 @@
 <?php
 namespace App\Constants;
 
-use App\Constants\Forms\Posttype\BookingConstant;
-use App\Constants\Forms\Posttype\ProductConstant;
-use App\Models\Category;
-use App\Models\CategoryMeta;
-
 class PostTypeConstant {
     public const code = 'code';
     public const name = 'name';
