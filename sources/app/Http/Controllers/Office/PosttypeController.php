@@ -25,11 +25,13 @@ class PosttypeController extends Controller
     public function index(Request $request)
     {
         $postType = $request->get('posttype');
-        $data = $this->postTypeService->getPaginationByPostType($postType);
+        list($data, $form, $defaultParams) = $this->postTypeService->getPaginationByPostType($postType, $request->all());
+
         return Inertia::render('Office/Posttype/PosttypeList', [
             'data' => $data,
             'posttype' => $postType,
-            'form' => $this->postTypeForm->getForm($postType)
+            'form' => $form,
+            'params' => $defaultParams
         ]);
     }
 

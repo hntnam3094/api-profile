@@ -6,8 +6,28 @@ import HasLink from "../Components/HasLink";
 import DefaultStatus from "../Components/Status/DefaultStatus";
 import { dateTimeFormat } from "@/Constants/Common";
 import HasPagination from "../Components/HasPagination";
+import { useForm } from "react-hook-form";
+import SearchFormGeneration from "../Components/SearchFormGeneration";
 
-export default function PosttypeList({ data, posttype, form }) {
+export default function PosttypeList({ data, posttype, form, params }) {
+    const {
+        register: registerRHF,
+        handleSubmit: handleSubmitRHF,
+        watch: watchRHF,
+        control: controlRHF,
+        unregister: unregisterRHF,
+        setValue: setValueRHF,
+    } = useForm({ defaultValues: params });
+
+    function onSubmit(data) {
+        let params = {
+            posttype: posttype
+        };
+
+        Object.assign(params, data);
+        window.location.href = route("posttype.index", params);
+    }
+
     function deleteStructionDetail(id) {
         if (confirm("Are you sure?") == true) {
             router.delete(route("posttype.delete", { id: id }));
@@ -15,15 +35,20 @@ export default function PosttypeList({ data, posttype, form }) {
     }
 
     function renderField(obj, key) {
-        if (key === 'image') {
-            return <img src={`${obj[key]}`} className="w-[100%] h-[80px] rounded-sm object-cover" />;
+        if (key === "image") {
+            return (
+                <img
+                    src={`${obj[key]}`}
+                    className="w-[100%] h-[80px] rounded-sm object-cover"
+                />
+            );
         }
         return obj[key];
     }
 
     return (
         <OfficeLayout>
-            <Head title="Struction page"  />
+            <Head title="Struction page" />
             <div className="mb-[20px] flex justify-end">
                 <HasLink
                     color="success"
@@ -34,6 +59,29 @@ export default function PosttypeList({ data, posttype, form }) {
                     <PlusIcon />
                 </HasLink>
             </div>
+            <form
+                onSubmit={handleSubmitRHF(onSubmit)}
+                className="flex items-center gap-x-[20px]"
+            >
+                <SearchFormGeneration
+                    form={form.search}
+                    register={registerRHF}
+                    watch={watchRHF}
+                    control={controlRHF}
+                    unregister={unregisterRHF}
+                    setValue={setValueRHF}
+                />
+
+                {form.search && form.search.length > 0 && (
+                    <Button
+                        type="submit"
+                        color="success"
+                        className="h-[50px] w-[50px]"
+                    >
+                        <ViewIcon />
+                    </Button>
+                )}
+            </form>
             <div className="overflow-x-auto">
                 <Table hoverable>
                     <Table.Head className="text-center">

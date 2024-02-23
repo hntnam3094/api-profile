@@ -2,13 +2,15 @@
 namespace App\Constants;
 
 class OptionConstant {
+    public const ACTIVE = 1;
+    public const INACTIVE = 0;
     public const defaultStatus = [
         [
-            'key' => 0,
+            'key' => self::INACTIVE,
             'value' => 'Inactive'
         ],
         [
-            'key' => 1,
+            'key' => self::ACTIVE,
             'value' => 'Active'
         ]
     ];

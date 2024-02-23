@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Forms\PostType\Form;
 
+use App\Constants\OptionConstant;
 use App\Constants\PostTypeConstant;
 
 class ProductForm {
@@ -8,7 +9,35 @@ class ProductForm {
     public $name = PostTypeConstant::PRODUCT_NAME;
     public $hasCategory = PostTypeConstant::PRODUCT_CATEGORY;
 
-    public $fieldSearch = [];
+    public $fieldSearch = [
+        [
+            'type' => 'text',
+            'name' => 'title',
+            'label' => 'Title',
+            'value' => '',
+            'placeholder' => 'Enter your title',
+            'validate' => []
+        ],
+        [
+            'type' => 'select',
+            'name' => PostTypeConstant::fieldCategory,
+            'label' => 'Category',
+            'value' => '',
+            'option' => PostTypeConstant::listTreeCategory,
+            'metaValue' => 'title',
+            'validate' => [
+                'rules' => 'required'
+            ],
+        ],
+        [
+            'type' => 'select',
+            'name' => 'status',
+            'label' => 'Status',
+            'value' => 1,
+            'option' => OptionConstant::defaultStatus,
+            'validate' => [],
+        ],
+    ];
 
     public $fieldForm = [
         [

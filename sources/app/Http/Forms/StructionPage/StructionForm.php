@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\File;
 
 class StructionForm {
     private $form = [];
+    private $listShow = [];
+    private $searchForm = [];
 
     public function __construct()
     {
@@ -27,11 +29,15 @@ class StructionForm {
 
                     if (!empty($formInstance->pageCode) && !empty($formInstance->code)) {
                         $this->form[$formInstance->pageCode][$formInstance->code] = $formInstance->form ?? [];
+                        $this->listShow[$formInstance->pageCode][$formInstance->code] = $formInstance->listShow ?? [];
+                        $this->searchForm[$formInstance->pageCode][$formInstance->code] = $formInstance->searchForm ?? [];
                     }
 
                     if (!empty($formInstance->pageCode) && empty($formInstance->code)) {
                         $this->form[$formInstance->pageCode] = $formInstance->form ?? [];
                     }
+
+
                 }
             }
         }
@@ -61,6 +67,14 @@ class StructionForm {
             return array_merge($formByCode, $this->defautlForm);
         }
         return [];
+    }
+
+    public function getListShow ($pageCode = '', $code = '') {
+        return $this->listShow[$pageCode][$code] ?? [];
+    }
+
+    public function getSearchForm ($pageCode = '', $code = '') {
+        return $this->searchForm[$pageCode][$code] ?? [];
     }
 
     public $defautlForm = [

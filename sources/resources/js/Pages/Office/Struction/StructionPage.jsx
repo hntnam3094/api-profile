@@ -6,12 +6,54 @@ import HasLink from "../Components/HasLink";
 import DefaultStatus from "../Components/Status/DefaultStatus";
 import { dateTimeFormat } from "@/Constants/Common";
 import HasPagination from "../Components/HasPagination";
-export default function StructionPage({ data, islist, pageCode, code }) {
+import { useForm } from "react-hook-form";
+import SearchFormGeneration from "../Components/SearchFormGeneration";
+
+export default function StructionPage({
+    id,
+    data,
+    islist,
+    pageCode,
+    code,
+    listShow = [],
+    searchForm = [],
+    params = [],
+}) {
+    const {
+        register: registerRHF,
+        handleSubmit: handleSubmitRHF,
+        watch: watchRHF,
+        control: controlRHF,
+        unregister: unregisterRHF,
+        setValue: setValueRHF,
+    } = useForm({ defaultValues: params });
+
+    function onSubmit(data) {
+        let params = {
+            id: id,
+            is_list: 1,
+        };
+
+        Object.assign(params, data);
+        window.location.href = route("structionpages.detail", params);
+    }
 
     function deleteStructionDetail(id) {
         if (confirm("Are you sure?") == true) {
-            router.delete(route('structionpages.delete', {id: id}))
+            router.delete(route("structionpages.delete", { id: id }));
         }
+    }
+
+    function renderField(obj, key) {
+        if (key === "image") {
+            return (
+                <img
+                    src={`${obj[key]}`}
+                    className="w-[100%] h-[80px] rounded-sm object-cover"
+                />
+            );
+        }
+        return obj[key];
     }
 
     return (
@@ -30,6 +72,32 @@ export default function StructionPage({ data, islist, pageCode, code }) {
                     </HasLink>
                 </div>
             )}
+            {!islist && (
+                <form
+                    onSubmit={handleSubmitRHF(onSubmit)}
+                    className="flex items-center gap-x-[20px]"
+                >
+                    <SearchFormGeneration
+                        form={searchForm}
+                        register={registerRHF}
+                        watch={watchRHF}
+                        control={controlRHF}
+                        unregister={unregisterRHF}
+                        setValue={setValueRHF}
+                    />
+
+                    {searchForm && searchForm.length > 0 && (
+                        <Button
+                            type="submit"
+                            color="success"
+                            className="h-[50px] w-[50px]"
+                        >
+                            <ViewIcon />
+                        </Button>
+                    )}
+                </form>
+            )}
+
             <div className="overflow-x-auto">
                 <Table hoverable>
                     <Table.Head className="text-center">
@@ -44,6 +112,13 @@ export default function StructionPage({ data, islist, pageCode, code }) {
 
                         {!islist && (
                             <>
+                                {listShow &&
+                                    listShow.length > 0 &&
+                                    listShow.map((itemList) => (
+                                        <Table.HeadCell>
+                                            {itemList}
+                                        </Table.HeadCell>
+                                    ))}
                                 <Table.HeadCell>Status</Table.HeadCell>
                                 <Table.HeadCell>Sequence</Table.HeadCell>
                                 <Table.HeadCell>Created at</Table.HeadCell>
@@ -73,7 +148,21 @@ export default function StructionPage({ data, islist, pageCode, code }) {
 
                                 {!islist && (
                                     <>
-                                        <Table.Cell><DefaultStatus value={item.status} /></Table.Cell>
+                                        {listShow &&
+                                            listShow.length > 0 &&
+                                            listShow.map((itemList) => (
+                                                <Table.Cell>
+                                                    {renderField(
+                                                        item,
+                                                        itemList
+                                                    )}
+                                                </Table.Cell>
+                                            ))}
+                                        <Table.Cell>
+                                            <DefaultStatus
+                                                value={item.status}
+                                            />
+                                        </Table.Cell>
                                         <Table.Cell>{item.sequence}</Table.Cell>
                                         <Table.Cell>
                                             {dateTimeFormat(item.created_at)}
@@ -85,7 +174,7 @@ export default function StructionPage({ data, islist, pageCode, code }) {
                                     <HasLink
                                         link={route("structionpages.detail", {
                                             id: item.id,
-                                            is_list: islist
+                                            is_list: islist,
                                         })}
                                     >
                                         <ViewIcon />
@@ -93,7 +182,7 @@ export default function StructionPage({ data, islist, pageCode, code }) {
                                     {!islist && (
                                         <HasLink
                                             link={route("structionpages.edit", {
-                                                id: item.id
+                                                id: item.id,
                                             })}
                                             color="warning"
                                         >
@@ -102,7 +191,13 @@ export default function StructionPage({ data, islist, pageCode, code }) {
                                     )}
 
                                     {!islist && (
-                                        <Button link="#" className="bg-red-400" onClick={() => deleteStructionDetail(item.id)}>
+                                        <Button
+                                            link="#"
+                                            className="bg-red-400"
+                                            onClick={() =>
+                                                deleteStructionDetail(item.id)
+                                            }
+                                        >
                                             <DeleteIcon />
                                         </Button>
                                     )}

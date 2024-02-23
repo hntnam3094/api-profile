@@ -37,10 +37,18 @@ class PostTypeService {
         $this->postTypeForm = $postTypeForm;
     }
 
-    public function getPaginationByPostType ($postType) {
+    public function getPaginationByPostType ($postType, $params) {
         if (!empty($postType)) {
-            $listPostDetail = $this->postTypeRepository->getPaginationByPostType($postType);
+            $form = $this->postTypeForm->getForm($postType);
             $listField = $this->getKeyOfFieldList($postType);
+            $searchFields = [];
+            if (!empty($form['search'])) {
+                foreach ($form['search'] as $search) {
+                    $searchFields[$search['name']] = $params[$search['name']] ?? $search['value'];
+                }
+            }
+
+            $listPostDetail = $this->postTypeRepository->getPaginationByPostType($postType, $params, $searchFields);
 
             if (count($listPostDetail) > 0) {
                 foreach ($listPostDetail as &$postDetail) {
@@ -56,7 +64,7 @@ class PostTypeService {
                 }
             }
 
-            return $listPostDetail;
+            return [$listPostDetail, $form, $searchFields];
         }
         return [];
     }

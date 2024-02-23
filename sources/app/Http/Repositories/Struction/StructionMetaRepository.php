@@ -17,4 +17,12 @@ class StructionMetaRepository extends BaseRepository {
     public function deleteByStructionDetailId ($id) {
         return $this->model->where('structionDetailId', $id)->delete();
     }
+
+    public function getByIdAndField ($id, $field = []) {
+        $query = $this->model->where('structionDetailId', $id);
+        if (!empty($field)) {
+            $query->where('key', $field);
+        }
+        return $query->select('key', 'value')->first();
+    }
 }

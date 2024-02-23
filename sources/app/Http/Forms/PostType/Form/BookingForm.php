@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Forms\PostType\Form;
 
+use App\Constants\OptionConstant;
 use App\Constants\PostTypeConstant;
 
 class BookingForm {
@@ -8,7 +9,24 @@ class BookingForm {
     public $name = PostTypeConstant::BOOKING_NAME;
     public $hasCategory = PostTypeConstant::BOOKING_CATEGORY;
 
-    public $fieldSearch = [];
+    public $fieldSearch = [
+        [
+            'type' => 'text',
+            'name' => 'title',
+            'label' => 'Title',
+            'value' => '',
+            'placeholder' => 'Enter your title',
+            'validate' => []
+        ],
+        [
+            'type' => 'select',
+            'name' => 'status',
+            'label' => 'Status',
+            'value' => 1,
+            'option' => OptionConstant::defaultStatus,
+            'validate' => [],
+        ],
+    ];
 
     public $fieldForm = [
         [

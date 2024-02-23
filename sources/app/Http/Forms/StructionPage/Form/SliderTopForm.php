@@ -2,10 +2,33 @@
 namespace App\Http\Forms\StructionPage\Form;
 
 use App\Constants\FormConstant;
+use App\Constants\OptionConstant;
 
 class SliderTopForm {
     public $pageCode = FormConstant::HOME;
     public $code = FormConstant::HOME_SLIDER;
+    public $listShow = [
+        'title', 'image'
+    ];
+
+    public $searchForm = [
+        [
+            'type' => 'text',
+            'name' => 'title',
+            'label' => 'Title',
+            'value' => '',
+            'placeholder' => 'Enter your title',
+            'validate' => []
+        ],
+        [
+            'type' => 'select',
+            'name' => 'status',
+            'label' => 'Status',
+            'value' => 1,
+            'option' => OptionConstant::defaultStatus,
+            'validate' => [],
+        ],
+    ];
 
     public $form = [
         [

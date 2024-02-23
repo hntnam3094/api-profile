@@ -63,7 +63,7 @@ class StructionPagesController extends Controller
 
         $this->structionService->save($request->all());
 
-        return redirect()->to(route('structionpages.detail', ['id' => $structionPageId, 'is_list' => 1, 'page_code' => $pageCode, 'code' => $code]));
+        return redirect()->to(route('structionpages.detail', ['id' => $structionPageId, 'is_list' => 1]));
     }
 
     /**
@@ -73,13 +73,17 @@ class StructionPagesController extends Controller
     {
         $is_list = $request->get('is_list');
         if ($is_list) {
-            list($data, $code, $page_code) = $this->structionService->getStructionDetailByStructionPageId($id);
+            list($data, $code, $page_code, $listShow, $searchForm, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
 
             return Inertia::render('Office/Struction/StructionPage', [
+                'id' => $id,
                 'data' => $data,
                 'islist' => 0,
                 'pageCode' => $page_code,
                 'code' => $code,
+                'listShow' => $listShow,
+                'searchForm' => $searchForm,
+                'params' => $defaultParams
             ]);
         }
 

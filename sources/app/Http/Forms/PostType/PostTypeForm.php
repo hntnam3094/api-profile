@@ -50,6 +50,12 @@ class PostTypeForm {
     }
 
     public function getForm ($code = '', $isShowDefault = true, $field = '') {
+        $listCheckCategory = [
+            $this->fieldCategory,
+            $this->fieldForm,
+            $this->fieldSearch
+        ];
+
         if(empty($code)) {
             $listForm = [];
             foreach($this->form as $key => $form) {
@@ -66,51 +72,28 @@ class PostTypeForm {
             }
         }
 
-        if (!empty($formByCode[$this->fieldCategory])) {
-            foreach ($formByCode[$this->fieldCategory] as &$category) {
-                if (!empty($category['option'])) {
-                    if ($category['option'] == $this->listCategory) {
-                        $category['option'] = $this->getCategoriesByPostType($formByCode[$this->code], $category['metaValue']);
-                    }
+        foreach ($listCheckCategory as $itemCheck) {
+            if (!empty($formByCode[$itemCheck])) {
+                foreach ($formByCode[$itemCheck] as &$category) {
+                    if (!empty($category['option'])) {
+                        if ($category['option'] == $this->listCategory) {
+                            $category['option'] = $this->getCategoriesByPostType($formByCode[$this->code], $category['metaValue']);
+                        }
 
-                    if ($category['option'] == $this->listTreeCategory) {
-                        $options = [
-                            [
-                                'key' => '',
-                                'value' => '- Select -'
-                            ]
-                        ];
+                        if ($category['option'] == $this->listTreeCategory) {
+                            $options = [
+                                [
+                                    'key' => '',
+                                    'value' => '- Select -'
+                                ]
+                            ];
 
-                        $category['option'] = $this->getTreeCategoriesByPostType($formByCode[$this->code], $category['metaValue'], $options);
-                    }
+                            $category['option'] = $this->getTreeCategoriesByPostType($formByCode[$this->code], $category['metaValue'], $options);
+                        }
 
-                    if (gettype($category['option']) != 'array') {
-                        $category['option'] = [];
-                    }
-                }
-            }
-        }
-
-        if (!empty($formByCode[$this->fieldForm])) {
-            foreach ($formByCode[$this->fieldForm] as &$category) {
-                if (!empty($category['option'])) {
-                    if ($category['option'] == $this->listCategory) {
-                        $category['option'] = $this->getCategoriesByPostType($formByCode[$this->code], $category['metaValue']);
-                    }
-
-                    if ($category['option'] == $this->listTreeCategory) {
-                        $options = [
-                            [
-                                'key' => '',
-                                'value' => '- Select -'
-                            ]
-                        ];
-
-                        $category['option'] = $this->getTreeCategoriesByPostType($formByCode[$this->code], $category['metaValue'], $options);
-                    }
-
-                    if (gettype($category['option']) != 'array') {
-                        $category['option'] = [];
+                        if (gettype($category['option']) != 'array') {
+                            $category['option'] = [];
+                        }
                     }
                 }
             }
@@ -136,7 +119,7 @@ class PostTypeForm {
     }
 
     private function getCategoriesByPostType ($postType, $value) {
-        $category = Category::where('postType', $postType)->where('parentId', 0)->select('id')->get();
+        $category = Category::where('postType', $postType)->where('parentId', 0)->where('status', OptionConstant::ACTIVE)->select('id')->get();
         $options = [
             [
                 'key' => '',
@@ -163,7 +146,7 @@ class PostTypeForm {
             $node++;
         }
 
-        $category = Category::where('postType', $postType)->where('parentId', $parentId)->select('id', 'parentId')->get();
+        $category = Category::where('postType', $postType)->where('parentId', $parentId)->where('status', OptionConstant::ACTIVE)->select('id', 'parentId')->get();
         if (!empty($category)) {
             foreach ($category as $cate) {
                 $cateMeta = CategoryMeta::where('categoryId', $cate->id)
