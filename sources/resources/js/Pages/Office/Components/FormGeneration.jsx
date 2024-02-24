@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import Editor from "./QuillEditor/Editor";
 import { Controller, useFieldArray } from "react-hook-form";
-
+import { FIELD_TEXT, FIELD_IMAGE, FIELD_SELECT, FIELD_RADIO, FIELD_CHECKBOX, FIELD_DATEPICKER, FIELD_EDITOR, FIELD_TEXTAREA } from "@/Constants/Common";
 function HasImage({ form, register, watch, setValue, className, isEdit, isDetail }) {
     const [url, setUrl] = useState("");
     const { onChange, ...props } = register(form.name);
