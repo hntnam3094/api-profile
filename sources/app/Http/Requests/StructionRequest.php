@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Constants\CommonConstant;
 use App\Constants\FormConstant;
 use App\Constants\StructionConstant;
 use App\Http\Forms\StructionPage\StructionForm;
@@ -27,10 +28,33 @@ class StructionRequest extends FormRequest
             $structionForm = $structionForm->getForm($pageCode, $code);
 
             foreach($structionForm[StructionConstant::fieldForm] as $field) {
-                $validator[$field['name']] = $field['validate']['rules'] ?? [];
+                $this->addValidator($field, $validator);
             }
 
         }
         return $validator;
+    }
+
+    private function addValidator ($field, &$validator) {
+        if ($field['name'] === CommonConstant::IMAGES) {
+            $this->checkValidatorImagesField($field, $validator);
+        } else {
+            $validator[$field['name']][] = $field['validate']['rules'] ?? [];
+        }
+    }
+
+    private function checkValidatorImagesField ($field, &$validator) {
+        $validator[$field['name']] = [
+            $field['validate']['rules'],
+            function ($attribute, $value, $fail) {
+                if (count($value) > 0) {
+                    foreach ($value as $val) {
+                        if (empty($val[CommonConstant::IMAGE])) {
+                            return $fail('The ' . $attribute . ' field is required.');
+                        }
+                    }
+                }
+            }
+        ];
     }
 }

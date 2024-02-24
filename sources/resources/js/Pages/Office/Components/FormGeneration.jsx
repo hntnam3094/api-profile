@@ -13,7 +13,7 @@ import {
 import { useState, useEffect } from "react";
 import Editor from "./QuillEditor/Editor";
 import { Controller, useFieldArray } from "react-hook-form";
-import { FIELD_TEXT, FIELD_IMAGE, FIELD_SELECT, FIELD_RADIO, FIELD_CHECKBOX, FIELD_DATEPICKER, FIELD_EDITOR, FIELD_TEXTAREA } from "@/Constants/Common";
+import { FIELD_TEXT, FIELD_IMAGE, FIELD_SELECT, FIELD_RADIO, FIELD_CHECKBOX, FIELD_DATEPICKER, FIELD_EDITOR, FIELD_TEXTAREA, FIELD_IMAGES } from "@/Constants/Common";
 function HasImage({ form, register, watch, setValue, className, isEdit, isDetail }) {
     const [url, setUrl] = useState("");
     const { onChange, ...props } = register(form.name);
@@ -440,7 +440,7 @@ function DetectField({
 }) {
     function renderForm() {
         switch (form.type) {
-            case "text": {
+            case FIELD_TEXT: {
                 return (
                     <HasTextInput
                         form={form}
@@ -452,7 +452,7 @@ function DetectField({
                     />
                 );
             }
-            case "image": {
+            case FIELD_IMAGE: {
                 return (
                     <HasImage
                         form={form}
@@ -466,7 +466,7 @@ function DetectField({
                     />
                 );
             }
-            case "select": {
+            case FIELD_SELECT: {
                 return (
                     <HasSelect
                         form={form}
@@ -478,7 +478,7 @@ function DetectField({
                     />
                 );
             }
-            case "images": {
+            case FIELD_IMAGES: {
                 return (
                     <HasListImage
                         form={form}
@@ -493,7 +493,7 @@ function DetectField({
                     />
                 );
             }
-            case "checkbox": {
+            case FIELD_CHECKBOX: {
                 return (
                     <HasCheckbox
                         form={form}
@@ -505,7 +505,7 @@ function DetectField({
                     />
                 );
             }
-            case "radio": {
+            case FIELD_RADIO: {
                 return (
                     <HasRadio
                         form={form}
@@ -517,7 +517,7 @@ function DetectField({
                     />
                 );
             }
-            case "textarea": {
+            case FIELD_TEXTAREA: {
                 return (
                     <HasTextArea
                         form={form}
@@ -529,7 +529,7 @@ function DetectField({
                     />
                 );
             }
-            case "editor": {
+            case FIELD_EDITOR: {
                 return (
                     <HasEditor
                         form={form}
@@ -540,7 +540,7 @@ function DetectField({
                     />
                 );
             }
-            case "datepicker": {
+            case FIELD_DATEPICKER: {
                 return (
                     <HasDatepicker
                         form={form}
