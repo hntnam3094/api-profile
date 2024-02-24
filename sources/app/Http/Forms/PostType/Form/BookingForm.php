@@ -52,11 +52,7 @@ class BookingForm {
             'type' => 'images',
             'name' => 'images',
             'label' => 'Images',
-            'value' => [
-                'link' => '',
-                'alt' => '',
-                'image' => []
-            ],
+            'value' => [],
             'validate' => [
                 'rules' => 'required'
             ]

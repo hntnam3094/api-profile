@@ -58,6 +58,15 @@ class HomeStoryForm {
             ]
         ],
         [
+            'type' => 'images',
+            'name' => 'images',
+            'label' => 'Images',
+            'value' => [],
+            'validate' => [
+                'rules' => 'required'
+            ]
+        ],
+        [
             'type' => 'textarea',
             'name' => 'summary',
             'label' => 'Sumary',

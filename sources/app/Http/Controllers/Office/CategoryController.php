@@ -43,7 +43,7 @@ class CategoryController extends Controller
         $form = $this->postTypeForm->getForm($postType);
 
         return Inertia::render('Office/Category/FormAdd', [
-            'dataForm' => [],
+            'dataForm' => $form[PostTypeConstant::defaultData][PostTypeConstant::fieldCategory] ?? [],
             'form' => $form
         ]);
     }

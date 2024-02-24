@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Office;
 
+use App\Constants\PostTypeConstant;
 use App\Http\Controllers\Controller;
 use App\Http\Forms\PostType\PostTypeForm;
 use App\Http\Requests\PostTypeRequest;
@@ -25,13 +26,13 @@ class PosttypeController extends Controller
     public function index(Request $request)
     {
         $postType = $request->get('posttype');
-        list($data, $form, $defaultParams) = $this->postTypeService->getPaginationByPostType($postType, $request->all());
+        list($data, $form, $params) = $this->postTypeService->getPaginationByPostType($postType, $request->all());
 
         return Inertia::render('Office/Posttype/PosttypeList', [
             'data' => $data,
             'posttype' => $postType,
             'form' => $form,
-            'params' => $defaultParams
+            'params' =>$params
         ]);
     }
 
@@ -44,7 +45,7 @@ class PosttypeController extends Controller
         $form = $this->postTypeForm->getForm($postType);
 
         return Inertia::render('Office/Posttype/FormAdd', [
-            'dataForm' => [],
+            'dataForm' => $form[PostTypeConstant::defaultData][PostTypeConstant::fieldForm] ?? [],
             'form' => $form
         ]);
     }

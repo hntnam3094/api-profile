@@ -2,6 +2,7 @@
 namespace App\Http\Forms\PostType;
 
 use App\Constants\OptionConstant;
+use App\Constants\PostTypeConstant;
 use App\Models\Category;
 use App\Models\CategoryMeta;
 use Illuminate\Support\Facades\File;
@@ -75,7 +76,7 @@ class PostTypeForm {
         foreach ($listCheckCategory as $itemCheck) {
             if (!empty($formByCode[$itemCheck])) {
                 foreach ($formByCode[$itemCheck] as &$category) {
-                    if (!empty($category['option'])) {
+                    if (!empty($category['option']) && gettype($category['option']) != 'array') {
                         if ($category['option'] == $this->listCategory) {
                             $category['option'] = $this->getCategoriesByPostType($formByCode[$this->code], $category['metaValue']);
                         }
@@ -89,10 +90,6 @@ class PostTypeForm {
                             ];
 
                             $category['option'] = $this->getTreeCategoriesByPostType($formByCode[$this->code], $category['metaValue'], $options);
-                        }
-
-                        if (gettype($category['option']) != 'array') {
-                            $category['option'] = [];
                         }
                     }
                 }
@@ -114,6 +111,16 @@ class PostTypeForm {
         if (!empty($formByCode[$this->fieldCategory]) && $isShowDefault) {
             $formByCode[$this->fieldCategory] = array_merge($formByCode[$this->fieldCategory], $this->defautlForm);
         }
+
+        $defaultData = [];
+        foreach ($listCheckCategory as $checkItem) {
+            if (!empty($formByCode[$checkItem])) {
+                foreach ($formByCode[$checkItem] as $itemCategory) {
+                    $defaultData[$checkItem][$itemCategory['name'] ?? ''] = isset($itemCategory['value']) ? $itemCategory['value'] : '';
+                }
+            }
+        }
+        $formByCode[PostTypeConstant::defaultData] = $defaultData;
 
         return $formByCode;
     }

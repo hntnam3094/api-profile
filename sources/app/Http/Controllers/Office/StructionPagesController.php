@@ -45,7 +45,7 @@ class StructionPagesController extends Controller
 
         $structionForm = $this->structionForm->getForm($page_code, $code);
         return Inertia::render('Office/Struction/FormAdd', [
-            'dataForm' => $this->structionService->getStructionValue($structionForm[StructionConstant::fieldForm]),
+            'dataForm' => $structionForm[StructionConstant::defaultData][StructionConstant::fieldForm] ?? [],
             'structionForm' => $structionForm,
             'pageCode' => $page_code,
             'code' => $code,

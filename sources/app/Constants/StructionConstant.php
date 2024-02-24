@@ -9,4 +9,5 @@ class StructionConstant {
     public const fieldSearch = 'search';
     public const fieldForm = 'form';
     public const fieldList = 'list';
+    public const defaultData = 'defaultData';
 }

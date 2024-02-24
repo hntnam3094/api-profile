@@ -21,7 +21,7 @@ export default function PosttypeList({ data, posttype, form, params }) {
 
     function onSubmit(data) {
         let params = {
-            posttype: posttype
+            posttype: posttype,
         };
 
         Object.assign(params, data);
@@ -88,8 +88,10 @@ export default function PosttypeList({ data, posttype, form, params }) {
                         <Table.HeadCell className="w-[30px]">ID</Table.HeadCell>
                         {form.list &&
                             form.list.length > 0 &&
-                            form.list.map((itemList) => (
-                                <Table.HeadCell>{itemList.name}</Table.HeadCell>
+                            form.list.map((itemList, key) => (
+                                <Table.HeadCell key={key}>
+                                    {itemList.name}
+                                </Table.HeadCell>
                             ))}
                         <Table.HeadCell>Status</Table.HeadCell>
                         <Table.HeadCell>Sequence</Table.HeadCell>
@@ -110,8 +112,8 @@ export default function PosttypeList({ data, posttype, form, params }) {
                                 </Table.Cell>
                                 {form.list &&
                                     form.list.length > 0 &&
-                                    form.list.map((itemList) => (
-                                        <Table.Cell>
+                                    form.list.map((itemList, key) => (
+                                        <Table.Cell key={key}>
                                             {renderField(item, itemList.key)}
                                         </Table.Cell>
                                     ))}

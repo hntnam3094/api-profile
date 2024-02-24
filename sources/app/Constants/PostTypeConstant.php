@@ -11,6 +11,7 @@ class PostTypeConstant {
     public const fieldCategoryList = 'category_list';
     public const listCategory = 'listCategory';
     public const listTreeCategory = 'listTreeCategory';
+    public const defaultData = 'defaultData';
 
     public const PRODUCT_CODE = 'product';
     public const PRODUCT_NAME = 'Poduct';

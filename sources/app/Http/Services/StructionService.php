@@ -176,17 +176,6 @@ class StructionService {
         return [$attr, $pageCode, $code];
     }
 
-    public function getStructionValue ($struction) {
-        $data = [];
-        if (!empty($struction)) {
-            foreach ($struction as $item) {
-                $data[$item['name']] = $item['value'];
-            }
-        }
-
-        return $data;
-    }
-
     public function getKeyValueByMeta ($metaData, $structionDetailRecord = null) {
         $data = [];
         foreach ($metaData as $key => $item) {

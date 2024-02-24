@@ -2,12 +2,13 @@
 namespace App\Http\Forms\StructionPage;
 
 use App\Constants\OptionConstant;
+use App\Constants\StructionConstant;
 use Illuminate\Support\Facades\File;
 
 class StructionForm {
-    public $fieldSearch = 'search';
-    public $fieldForm = 'form';
-    public $fieldList = 'list';
+    public $fieldSearch = StructionConstant::fieldSearch;
+    public $fieldForm = StructionConstant::fieldForm;
+    public $fieldList = StructionConstant::fieldList;
 
     private $form = [];
 
@@ -46,6 +47,10 @@ class StructionForm {
     }
 
     public function getForm ($pageCode = '', $code = '', $isShowDefault = true) {
+        $listCheckCategory = [
+            $this->fieldForm,
+            $this->fieldSearch
+        ];
 
         if(empty($pageCode) && empty($code)) {
             $listForm = [];
@@ -68,6 +73,17 @@ class StructionForm {
         if (!empty($formByCode[$this->fieldForm]) && $isShowDefault) {
             $formByCode[$this->fieldForm] = array_merge($formByCode[$this->fieldForm], $this->defautlForm);
         }
+
+        $defaultData = [];
+        foreach ($listCheckCategory as $checkItem) {
+            if (!empty($formByCode[$checkItem])) {
+                foreach ($formByCode[$checkItem] as $itemCategory) {
+                    $defaultData[$checkItem][$itemCategory['name'] ?? ''] = isset($itemCategory['value']) ? $itemCategory['value'] : '';
+                }
+            }
+        }
+        $formByCode[StructionConstant::defaultData] = $defaultData;
+
         return $formByCode;
     }
 
