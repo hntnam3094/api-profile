@@ -6,4 +6,5 @@ class CommonConstant {
     public const IMAGE = 'image';
     public const IMAGES = 'images';
     public const STATUS = 'status';
+    public const SLUG = 'slug';
 }

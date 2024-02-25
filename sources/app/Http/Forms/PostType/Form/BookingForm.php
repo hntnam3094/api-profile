@@ -36,7 +36,7 @@ class BookingForm {
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -45,7 +45,7 @@ class BookingForm {
             'label' => 'Image',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -54,7 +54,7 @@ class BookingForm {
             'label' => 'Images',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -63,7 +63,7 @@ class BookingForm {
             'label' => 'Link',
             'value' => '',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
         [
@@ -74,7 +74,7 @@ class BookingForm {
             'option' => PostTypeConstant::listTreeCategory,
             'metaValue' => 'title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
     ];
@@ -87,7 +87,7 @@ class BookingForm {
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -96,7 +96,7 @@ class BookingForm {
             'label' => 'Image',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [

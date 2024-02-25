@@ -45,7 +45,7 @@ class HomeStoryForm {
             'label' => 'Title',
             'value' => '',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
         [
@@ -54,7 +54,7 @@ class HomeStoryForm {
             'label' => 'Image',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -63,7 +63,7 @@ class HomeStoryForm {
             'label' => 'Images',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -72,7 +72,7 @@ class HomeStoryForm {
             'label' => 'Sumary',
             'value' => '',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
     ];

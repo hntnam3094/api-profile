@@ -25,9 +25,7 @@ class ProductForm {
             'value' => '',
             'option' => PostTypeConstant::listTreeCategory,
             'metaValue' => 'title',
-            'validate' => [
-                'rules' => 'required'
-            ],
+            'validate' => [],
         ],
         [
             'type' => 'select',
@@ -47,7 +45,18 @@ class ProductForm {
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'text',
+            'name' => 'slug',
+            'label' => 'Slug',
+            'value' => '',
+            'slugOfField' => 'title',
+            'placeholder' => 'Enter your title',
+            'validate' => [
+                'rules' => ['required']
             ]
         ],
         [
@@ -56,7 +65,7 @@ class ProductForm {
             'label' => 'Image',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -65,7 +74,7 @@ class ProductForm {
             'label' => 'Images',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -74,7 +83,7 @@ class ProductForm {
             'label' => 'Link',
             'value' => '',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
         [
@@ -85,7 +94,7 @@ class ProductForm {
             'option' => PostTypeConstant::listTreeCategory,
             'metaValue' => 'title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
     ];
@@ -98,7 +107,18 @@ class ProductForm {
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'text',
+            'name' => 'slug',
+            'label' => 'Slug',
+            'value' => '',
+            'slugOfField' => 'title',
+            'placeholder' => 'Enter your title',
+            'validate' => [
+                'rules' => ['required']
             ]
         ],
         [
@@ -107,7 +127,7 @@ class ProductForm {
             'label' => 'Image',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [

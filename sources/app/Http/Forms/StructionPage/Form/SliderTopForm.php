@@ -45,7 +45,19 @@ class SliderTopForm {
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'text',
+            'name' => 'slug',
+            'label' => 'Slug',
+            'value' => '',
+            'slugOfField' => 'title',
+            'disabled' => true,
+            'placeholder' => 'Enter your title',
+            'validate' => [
+                'rules' => ['required']
             ]
         ],
         [
@@ -54,7 +66,7 @@ class SliderTopForm {
             'label' => 'Image',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -63,7 +75,7 @@ class SliderTopForm {
             'label' => 'Images',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
         [
@@ -72,7 +84,7 @@ class SliderTopForm {
             'label' => 'Link',
             'value' => '',
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ],
         ],
     ];

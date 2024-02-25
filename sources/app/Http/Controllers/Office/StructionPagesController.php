@@ -124,7 +124,9 @@ class StructionPagesController extends Controller
             'dataForm' => $data,
             'structionForm' => $structionForm,
             'id' => $id,
-            'structionPageId' => $structionDetailRecord->structionPageId
+            'structionPageId' => $structionDetailRecord->structionPageId,
+            'pageCode' => $page_code,
+            'code' => $code
         ]);
     }
 

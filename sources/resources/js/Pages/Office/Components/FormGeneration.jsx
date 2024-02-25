@@ -108,16 +108,34 @@ function HasImage({ form, register, watch, setValue, className, isEdit, isDetail
     );
 }
 
-function HasTextInput({ form, register, className, isDetail }) {
+function HasTextInput({ form, register, className, watch, setValue, isDetail }) {
+    useEffect(() => {
+        if (form.slugOfField) {
+            const watchedValue = watch(form.slugOfField);
+            setValue(form.name, convertToSlug(watchedValue));
+        }
+    }, [watch(form.slugOfField)]);
+
+    function removeDiacritics(str) {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    }
+
+    function convertToSlug(str) {
+        str = removeDiacritics(str.toLowerCase());
+        str = str.replace(/[^\w\s]/g, '');
+        str = str.replace(/\s+/g, '-');
+        return str;
+    }
+
     return (
         <TextInput
-            id={form.name}
-            defaultValue={form.value}
-            {...register(form.name)}
-            className={`w-full ${className}`}
-            placeholder={form.placeholder}
-            disabled={isDetail}
-        />
+                id={form.name}
+                defaultValue={form.value}
+                {...register(form.name)}
+                className={`w-full ${className}`}
+                placeholder={form.placeholder}
+                disabled={isDetail || form.disabled}
+            />
     );
 }
 
@@ -449,6 +467,7 @@ function DetectField({
                         control={control}
                         className={className}
                         isDetail={isDetail}
+                        setValue={setValue}
                     />
                 );
             }
