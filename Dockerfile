@@ -38,6 +38,5 @@ RUN docker-php-ext-configure gd \
 
 # Cài đặt Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
 # Sao chép các file ứng dụng
 COPY . .
