@@ -10,6 +10,7 @@ services:
       - ./config/php/php:/usr/local/etc/php
     depends_on:
       - db
+    entrypoint: /var/www/html/release.sh
     networks:
       hideandseek-network: 
 
