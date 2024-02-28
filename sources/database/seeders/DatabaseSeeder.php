@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(
             [
                 StructionPagesSeeder::class,
-                PosttypeSeeder::class
+                PostTypeSeeder::class
             ]
         );
         // \App\Models\User::factory(10)->create();
