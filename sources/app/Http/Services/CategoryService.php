@@ -104,9 +104,10 @@ class CategoryService {
                 foreach ($attr as $key => $value) {
 
                     if(in_array($key, $structionPageField)) {
-                        if (($key == 'parentId' && empty($value)) || ($value == $id)) {
+                        if (($key == 'parentId' && (empty($value) || $value == $id))) {
                             $value = 0;
                         }
+
                         $this->categoryRepository->update($id, [$key => $value]);
                         continue;
                     }
