@@ -8,9 +8,6 @@ services:
     volumes:
       - ./sources:/var/www/html
       - ./config/php/php:/usr/local/etc/php
-    networks:
-      - default
-      - hasstudio-network
 
   webserver:
     image: nginx:1.17-alpine
@@ -20,11 +17,4 @@ services:
     volumes:
       - ./sources:/var/www/html
       - ./config/nginx.conf:/etc/nginx/conf.d/default.conf
-    networks:
-      - default
-      - hasstudio-network
-
-networks:
-  hasstudio-network:
-    external: true
       
