@@ -17,6 +17,7 @@ class UserController extends Controller
     public function __construct (UserService $userService)
     {
         $this->userService = $userService;
+        $this->middleware(['role:system-admin|admin']);
     }
     /**
      * Display a listing of the resource.

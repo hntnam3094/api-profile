@@ -2,6 +2,7 @@
 namespace App\Http\Repositories;
 
 use App\Constants\CommonConstant;
+use App\Constants\PermissionConstant;
 use App\Http\Repositories\BaseRepository;
 
 class UserRepository extends BaseRepository {
@@ -22,6 +23,7 @@ class UserRepository extends BaseRepository {
         }
 
         return $query->where('name', 'like', '%' . ($params['name'] ?? '') . '%')
+                    ->where('email', '!=', PermissionConstant::ADMIN_EMAIL)
                     ->orderBy('created_at', 'DESC')
                     ->select('id', 'name', 'status', 'created_at')
                     ->paginate(CommonConstant::PAGINATION_LIMIT)

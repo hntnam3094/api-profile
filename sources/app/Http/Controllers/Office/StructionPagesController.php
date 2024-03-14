@@ -22,6 +22,7 @@ class StructionPagesController extends Controller
     {
         $this->structionService = $structionService;
         $this->structionForm = $structionForm;
+        $this->middleware(['role:system-admin']);
     }
 
     public function index()

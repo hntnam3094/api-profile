@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Constants\PermissionConstant;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -20,26 +22,29 @@ class PermissionSeeder extends Seeder
         DB::table('permissions')->truncate();
         DB::table('roles')->truncate();
         DB::table('role_has_permissions')->truncate();
-        DB::table('model_has_permissions')->truncate();
-        DB::table('model_has_roles')->truncate();
 
-        $role = Role::create(
-            [
-                'name' => 'admin'
-            ]
-        );
+        foreach(PermissionConstant::ROLE as $role) {
+            Role::create($role);
+        }
 
-        $permissions = [
-            ['name' => 'view developer'],
-            ['name' => 'view struction'],
-            ['name' => 'edit struction'],
-            ['name' => 'view posttype'],
-            ['name' => 'edit posttype']
-        ];
+        $permissions = [];
+
+        foreach (PermissionConstant::PERMISSION as $permission) {
+            $permissionName = $permission['name'];
+            foreach ($permission['action'] as $action) {
+                $permissionAction = $action . ' ' . $permissionName;
+                $permissions[]['name'] = $permissionAction;
+            }
+        }
 
         foreach ($permissions as $permissionData) {
             $permission = Permission::create($permissionData);
-            $permission->assignRole($role);
+            foreach (Role::all() as $role) {
+                $permission->assignRole($role);
+            }
         }
+
+        $user = User::where('email', 'admin@gmail.com')->first();
+        $user->syncRoles([PermissionConstant::SYSTEM_ADMIN]);
     }
 }
