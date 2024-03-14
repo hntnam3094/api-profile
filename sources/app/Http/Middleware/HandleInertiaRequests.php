@@ -31,12 +31,43 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $user = $request->user();
+        list($roles, $permissions) = $this->getRoleAndPermission($user);
+
         return [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
-                'posttype' => DB::table('post_type')->get()
+                'user' => $user,
+                'posttype' => DB::table('post_type')->get(),
+                'roles' => $roles,
+                'permissions' => $permissions
             ]
         ];
+    }
+
+    private function getRoleAndPermission ($user) {
+        $roleData = [];
+        $permissionData = [];
+        if (!empty($user)) {
+            $roles = $user->getRoleNames();
+            $permissions = $user->getAllPermissions();
+            foreach ($roles as $role) {
+                if (empty($role)) {
+                    continue;
+                }
+
+                $roleData[] = $role;
+            }
+
+            foreach ($permissions as $permission) {
+                if (empty($permission['name'])) {
+                    continue;
+                }
+
+                $permissionData[] = $permission['name'];
+            }
+        }
+
+        return [$roleData, $permissionData];
     }
 }

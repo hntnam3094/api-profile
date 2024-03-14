@@ -3,12 +3,12 @@ import HasSidebar from "@/Pages/Office/Components/HasSidebar";
 import {usePage} from "@inertiajs/react";
 export default function OfficeLayout({ children }) {
     const { auth } = usePage().props
-
+    console.log(auth)
     return (
         <AuthenticatedLayout user={auth.user}>
             <div className="w-full flex">
                 <div className="w-1/6">
-                    <HasSidebar posttype={auth.posttype}/>
+                    <HasSidebar posttype={auth.posttype} roles={auth.roles}/>
                 </div>
                 <div className="w-5/6">
                     <div className="py-[15px]">
