@@ -5,7 +5,7 @@ export const MinusIcon = (props) => {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-dash-circle"
+            className="bi bi-dash-circle"
             viewBox="0 0 16 16"
             {...props}
         >

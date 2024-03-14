@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Office\PermissionsController;
 use App\Http\Controllers\Office\PosttypeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -30,6 +32,11 @@ Route::prefix('/office')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+        Route::prefix('/permissions')->group(function () {
+            Route::post('/register', [RegisteredUserController::class, 'store'])->name('permissions.register_post');
+            Route::get('/register', [RegisteredUserController::class, 'create'])->name('permissions.register');
+        });
     });
 });
 

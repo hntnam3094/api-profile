@@ -5,7 +5,7 @@ export const AvtiveIcon = props => {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-check2-circle"
+            className="bi bi-check2-circle"
             viewBox="0 0 16 16"
             {...props}
         >

@@ -59,7 +59,7 @@ class PostTypeRepository extends BaseRepository {
                     ->orderBy('post_detail.created_at', 'DESC')
                     ->select('post_detail.*')
                     ->paginate(CommonConstant::PAGINATION_LIMIT)
-                    ->appends($params);;
+                    ->appends($params);
     }
 
 }
