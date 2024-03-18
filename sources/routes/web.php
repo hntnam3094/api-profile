@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Office\PermissionsController;
 use App\Http\Controllers\Office\PosttypeController;
 use App\Http\Controllers\Office\StructionPagesController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -20,9 +24,10 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/about.html', [AboutController::class, 'index'])->name('about.index');
+Route::get('/product.html', [ProductController::class, 'index'])->name('product.index');
+Route::get('/contact.html', [ContactController::class, 'index'])->name('contact.index');
 
 Route::prefix('/office')->group(function () {
     Route::get('/dashboard', function () {
