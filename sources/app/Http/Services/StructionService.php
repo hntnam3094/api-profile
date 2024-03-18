@@ -112,6 +112,10 @@ class StructionService {
         return 0;
     }
 
+    public function getSingleStructionDetailByStructionPageId ($id) {
+        return $this->structionDetailsRepository->getFirstByStructionPageId($id);
+    }
+
     public function save ($attr, $id = 0) {
         $structionPageField = ['status', 'sequence'];
 

@@ -6,7 +6,9 @@ import { router } from "@inertiajs/react";
 export default function FormDetail({
     dataForm,
     structionForm,
-    id
+    id,
+    structionPageId,
+    singleRow = 0
 }) {
     const {
         register: registerRHF,
@@ -17,7 +19,12 @@ export default function FormDetail({
     } = useForm({ defaultValues: dataForm });
 
     function edit () {
-        router.get(route('structionpages.edit', {id: id, 'is_list': 0 }))
+        console.log(singleRow)
+        if (singleRow == 1) {
+            router.get(route('structionpages.single_edit', {id: structionPageId }))
+        } else {
+            router.get(route('structionpages.edit', {id: id, 'is_list': 0 }))
+        }
     }
 
     return (

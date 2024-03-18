@@ -110,8 +110,23 @@ class StructionPagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit (string $id)
+    public function edit (Request $request, string $id)
     {
+        $is_list = $request->get('is_list');
+        if ($is_list) {
+            list($data, $code, $page_code, $form, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
+
+            return Inertia::render('Office/Struction/StructionPage', [
+                'id' => $id,
+                'data' => $data,
+                'islist' => 0,
+                'pageCode' => $page_code,
+                'code' => $code,
+                'form' => $form,
+                'params' => $defaultParams
+            ]);
+        }
+
         $metaData = $this->structionService->getStructionMetaByStructionDetailId($id);
         list($structionDetailRecord, $code, $page_code) = $this->structionService->getStructionDetailAndCodeAndPageCodeByStructionDetailId($id);
         if (empty($metaData)) {
@@ -152,5 +167,64 @@ class StructionPagesController extends Controller
 
         $this->structionService->deleteStructionDetailById($id);
         return redirect()->to(route('structionpages.detail', ['id' => $structionPageRecord->id, 'is_list' => 1]));
+    }
+
+    public function singleShow ($id) {
+        $structionPage = $this->structionService->getStructionPageById($id);
+        if ($structionPage) {
+            $structionForm = $this->structionForm->getForm($structionPage->pageCode, $structionPage->code);
+            $structionDetail = $this->structionService->getSingleStructionDetailByStructionPageId($structionPage->id);
+            $metaData = $this->structionService->getStructionMetaByStructionDetailId($structionDetail->id);
+            if (empty($metaData)) {
+                abort(404);
+            }
+            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail);
+
+            return Inertia::render('Office/Struction/FormDetail', [
+                'dataForm' => $data,
+                'structionForm' => $structionForm,
+                'id' => $structionDetail->id,
+                'structionPageId' => $id,
+                'singleRow' => 1
+            ]);
+        }
+    }
+
+    public function singleEdit ($id) {
+        $structionPage = $this->structionService->getStructionPageById($id);
+        if ($structionPage) {
+            $structionForm = $this->structionForm->getForm($structionPage->pageCode, $structionPage->code);
+            $structionDetail = $this->structionService->getSingleStructionDetailByStructionPageId($id);
+            $metaData = $this->structionService->getStructionMetaByStructionDetailId($structionDetail->id);
+            if (empty($metaData)) {
+                abort(404);
+            }
+            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail);
+
+            return Inertia::render('Office/Struction/FormAdd', [
+                'dataForm' => $data,
+                'structionForm' => $structionForm,
+                'id' => $structionDetail->id,
+                'structionPageId' => $id,
+                'pageCode' => $structionPage->pageCode,
+                'code' => $structionPage->code,
+                'singleRow' => 1
+            ]);
+        }
+    }
+
+    public function singleUpdate(StructionRequest $request, string $id)
+    {
+        $structionPage = $this->structionService->getStructionPageById($id);
+        if ($structionPage) {
+            $structionDetail = $this->structionService->getSingleStructionDetailByStructionPageId($id);
+            if (empty($structionDetail)) {
+                $this->structionService->save($request->all());
+            } else {
+                $this->structionService->save($request->all(), $structionDetail->id);
+            }
+
+            return redirect()->to(route('structionpages.index'));
+        }
     }
 }

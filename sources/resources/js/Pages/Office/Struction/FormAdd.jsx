@@ -10,7 +10,9 @@ export default function FormAdd({
     structionForm,
     pageCode,
     code,
-    id = 0
+    id = 0,
+    structionPageId,
+    singleRow = 0
 }) {
     const {
         register: registerRHF,
@@ -46,7 +48,11 @@ export default function FormAdd({
 
     function onSubmit() {
         if (id) {
-            post(route("structionpages.update", { id: id, page_code: pageCode, code: code }))
+            if (singleRow == 1) {
+                post(route("structionpages.single_update", { id: structionPageId, page_code: pageCode, code: code }))
+            } else {
+                post(route("structionpages.update", { id: id, page_code: pageCode, code: code }))
+            }
         } else {
             post(route("structionpages.store", { page_code: pageCode, code: code }))
         }

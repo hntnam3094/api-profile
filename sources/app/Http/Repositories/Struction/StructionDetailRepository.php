@@ -37,4 +37,8 @@ class StructionDetailRepository extends BaseRepository {
                     ->paginate(CommonConstant::PAGINATION_LIMIT)
                     ->appends($params);
     }
+
+    public function getFirstByStructionPageId ($id) {
+        return $this->model->where('structionPageId', $id)->first();
+    }
 }

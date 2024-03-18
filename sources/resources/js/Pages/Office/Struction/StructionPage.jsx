@@ -105,7 +105,6 @@ export default function StructionPage({
                             <>
                                 <Table.HeadCell>Title</Table.HeadCell>
                                 <Table.HeadCell>PageCode</Table.HeadCell>
-                                <Table.HeadCell>Status</Table.HeadCell>
                             </>
                         )}
 
@@ -141,7 +140,6 @@ export default function StructionPage({
                                     <>
                                         <Table.Cell>{item.title}</Table.Cell>
                                         <Table.Cell>{item.pageCode}</Table.Cell>
-                                        <Table.Cell>{item.status}</Table.Cell>
                                     </>
                                 )}
 
@@ -170,35 +168,95 @@ export default function StructionPage({
                                 )}
 
                                 <Table.Cell className="flex gap-[5px] justify-center">
-                                    <HasLink
-                                        link={route("structionpages.detail", {
-                                            id: item.id,
-                                            is_list: islist,
-                                        })}
-                                    >
-                                        <ViewIcon />
-                                    </HasLink>
-                                    {!islist && (
-                                        <HasLink
-                                            link={route("structionpages.edit", {
-                                                id: item.id,
-                                            })}
-                                            color="warning"
-                                        >
-                                            <EditIcon />
-                                        </HasLink>
+                                    {item.singleRow == 0 && (
+                                        <>
+                                            <HasLink
+                                                link={route(
+                                                    "structionpages.detail",
+                                                    {
+                                                        id: item.id,
+                                                        is_list: islist,
+                                                    }
+                                                )}
+                                            >
+                                                <ViewIcon />
+                                            </HasLink>
+                                            <HasLink
+                                                link={route(
+                                                    "structionpages.edit",
+                                                    {
+                                                        id: item.id,
+                                                        is_list: islist,
+                                                    }
+                                                )}
+                                                color="warning"
+                                            >
+                                                <EditIcon />
+                                            </HasLink>
+                                        </>
+                                    )}
+
+                                    {item.singleRow == 1 && (
+                                        <>
+                                            <HasLink
+                                                link={route(
+                                                    "structionpages.single_detail",
+                                                    {
+                                                        id: item.id,
+                                                    }
+                                                )}
+                                            >
+                                                <ViewIcon />
+                                            </HasLink>
+                                            <HasLink
+                                                link={route(
+                                                    "structionpages.single_edit",
+                                                    {
+                                                        id: item.id,
+                                                    }
+                                                )}
+                                                color="warning"
+                                            >
+                                                <EditIcon />
+                                            </HasLink>
+                                        </>
                                     )}
 
                                     {!islist && (
-                                        <Button
-                                            link="#"
-                                            className="bg-red-400"
-                                            onClick={() =>
-                                                deleteStructionDetail(item.id)
-                                            }
-                                        >
-                                            <DeleteIcon />
-                                        </Button>
+                                        <>
+                                            <HasLink
+                                                link={route(
+                                                    "structionpages.detail",
+                                                    {
+                                                        id: item.id,
+                                                    }
+                                                )}
+                                            >
+                                                <ViewIcon />
+                                            </HasLink>
+                                            <HasLink
+                                                link={route(
+                                                    "structionpages.edit",
+                                                    {
+                                                        id: item.id,
+                                                    }
+                                                )}
+                                                color="warning"
+                                            >
+                                                <EditIcon />
+                                            </HasLink>
+                                            <Button
+                                                link="#"
+                                                className="bg-red-400"
+                                                onClick={() =>
+                                                    deleteStructionDetail(
+                                                        item.id
+                                                    )
+                                                }
+                                            >
+                                                <DeleteIcon />
+                                            </Button>
+                                        </>
                                     )}
                                 </Table.Cell>
                             </Table.Row>
