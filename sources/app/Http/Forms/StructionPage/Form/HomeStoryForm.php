@@ -49,9 +49,54 @@ class HomeStoryForm {
             ],
         ],
         [
+            'type' => 'text',
+            'name' => 'title_1',
+            'label' => 'Title 1',
+            'value' => '',
+            'validate' => [
+                'rules' => ['required']
+            ],
+        ],
+        [
+            'type' => 'textarea',
+            'name' => 'sub_title_1',
+            'label' => 'Sub title 1',
+            'value' => '',
+            'validate' => [
+                'rules' => ['required']
+            ],
+        ],
+        [
             'type' => 'image',
-            'name' => 'image',
-            'label' => 'Image',
+            'name' => 'image_1',
+            'label' => 'Image 1',
+            'value' => [],
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'text',
+            'name' => 'title_2',
+            'label' => 'Title 2',
+            'value' => '',
+            'validate' => [
+                'rules' => ['required']
+            ],
+        ],
+        [
+            'type' => 'textarea',
+            'name' => 'sub_title_2',
+            'label' => 'Sub title 2',
+            'value' => '',
+            'validate' => [
+                'rules' => ['required']
+            ],
+        ],
+        [
+            'type' => 'image',
+            'name' => 'image_2',
+            'label' => 'Image 2',
             'value' => [],
             'validate' => [
                 'rules' => ['required']
@@ -59,21 +104,12 @@ class HomeStoryForm {
         ],
         [
             'type' => 'images',
-            'name' => 'images',
-            'label' => 'Images',
+            'name' => 'listImage',
+            'label' => 'List Image',
             'value' => [],
             'validate' => [
-                'rules' => ['required']
+                'rules' => 'required'
             ]
-        ],
-        [
-            'type' => 'textarea',
-            'name' => 'summary',
-            'label' => 'Sumary',
-            'value' => '',
-            'validate' => [
-                'rules' => ['required']
-            ],
         ],
     ];
 }

@@ -13,8 +13,26 @@ import {
 import { useState, useEffect } from "react";
 import Editor from "./QuillEditor/Editor";
 import { Controller, useFieldArray } from "react-hook-form";
-import { FIELD_TEXT, FIELD_IMAGE, FIELD_SELECT, FIELD_RADIO, FIELD_CHECKBOX, FIELD_DATEPICKER, FIELD_EDITOR, FIELD_TEXTAREA, FIELD_IMAGES } from "@/Constants/Common";
-function HasImage({ form, register, watch, setValue, className, isEdit, isDetail }) {
+import {
+    FIELD_TEXT,
+    FIELD_IMAGE,
+    FIELD_SELECT,
+    FIELD_RADIO,
+    FIELD_CHECKBOX,
+    FIELD_DATEPICKER,
+    FIELD_EDITOR,
+    FIELD_TEXTAREA,
+    FIELD_IMAGES,
+} from "@/Constants/Common";
+function HasImage({
+    form,
+    register,
+    watch,
+    setValue,
+    className,
+    isEdit,
+    isDetail,
+}) {
     const [url, setUrl] = useState("");
     const { onChange, ...props } = register(form.name);
 
@@ -40,7 +58,7 @@ function HasImage({ form, register, watch, setValue, className, isEdit, isDetail
     useEffect(() => {
         const fetchData = async () => {
             const imageUrl = watch(form.name);
-            if (typeof imageUrl == 'string') {
+            if (typeof imageUrl == "string") {
                 try {
                     const response = await fetch(imageUrl);
                     if (!response.ok) {
@@ -81,21 +99,23 @@ function HasImage({ form, register, watch, setValue, className, isEdit, isDetail
             />
             {url && (
                 <div className="relative max-w-[250px]">
-                    {!isDetail && (<span
-                        onClick={removeImage}
-                        className="opacity-90 cursor-pointer absolute bg-white rounded-full p-[5px] m-[3px] right-0"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            className="bi bi-x-lg"
-                            viewBox="0 0 16 16"
+                    {!isDetail && (
+                        <span
+                            onClick={removeImage}
+                            className="opacity-90 cursor-pointer absolute bg-white rounded-full p-[5px] m-[3px] right-0"
                         >
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-                        </svg>
-                    </span>)}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-x-lg"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                            </svg>
+                        </span>
+                    )}
 
                     <img
                         className="max-w-[250px] mt-[10px]"
@@ -108,7 +128,14 @@ function HasImage({ form, register, watch, setValue, className, isEdit, isDetail
     );
 }
 
-function HasTextInput({ form, register, className, watch, setValue, isDetail }) {
+function HasTextInput({
+    form,
+    register,
+    className,
+    watch,
+    setValue,
+    isDetail,
+}) {
     useEffect(() => {
         if (form.slugOfField) {
             const watchedValue = watch(form.slugOfField);
@@ -117,32 +144,36 @@ function HasTextInput({ form, register, className, watch, setValue, isDetail }) 
     }, [watch(form.slugOfField)]);
 
     function removeDiacritics(str) {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
     function convertToSlug(str) {
         str = removeDiacritics(str.toLowerCase());
-        str = str.replace(/[^\w\s]/g, '');
-        str = str.replace(/\s+/g, '-');
+        str = str.replace(/[^\w\s]/g, "");
+        str = str.replace(/\s+/g, "-");
         return str;
     }
 
     return (
         <TextInput
-                id={form.name}
-                defaultValue={form.value}
-                {...register(form.name)}
-                className={`w-full ${className}`}
-                placeholder={form.placeholder}
-                disabled={isDetail || form.disabled}
-            />
+            id={form.name}
+            defaultValue={form.value}
+            {...register(form.name)}
+            className={`w-full ${className}`}
+            placeholder={form.placeholder}
+            disabled={isDetail || form.disabled}
+        />
     );
 }
 
 function HasSelect({ form, register, className, isDetail }) {
     return (
-
-        <Select id={form.name} {...register(form.name)} className={className} disabled={isDetail}>
+        <Select
+            id={form.name}
+            {...register(form.name)}
+            className={className}
+            disabled={isDetail}
+        >
             {form.option.map((item, key) => (
                 <option key={key} value={item.key}>
                     {item.value}
@@ -156,7 +187,7 @@ function GenerationImage({ file, keyField, setValue, isDetail }) {
     const [imageUrl, setImageUrl] = useState("");
 
     async function getBase64(fileInput) {
-        if (typeof fileInput != 'string') {
+        if (typeof fileInput != "string") {
             const file = fileInput[0];
 
             if (file) {
@@ -182,7 +213,7 @@ function GenerationImage({ file, keyField, setValue, isDetail }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (typeof file == 'string') {
+            if (typeof file == "string") {
                 try {
                     const response = await fetch(file);
                     if (!response.ok) {
@@ -195,7 +226,7 @@ function GenerationImage({ file, keyField, setValue, isDetail }) {
                     const fileRes = new File([blob], "image.jpg", {
                         type: "image/jpeg",
                     });
-                    setValue(keyField, [fileRes])
+                    setValue(keyField, [fileRes]);
 
                     const reader = new FileReader();
                     reader.onloadend = () => {
@@ -222,64 +253,71 @@ function GenerationImage({ file, keyField, setValue, isDetail }) {
         <div>
             {imageUrl && (
                 <div className="relative w-[70%]">
-                    {!isDetail && (<span
-                        onClick={removeImage}
-                        className="opacity-90 cursor-pointer absolute bg-white rounded-full p-[5px] m-[3px] right-0"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="currentColor"
-                            className="bi bi-x-lg"
-                            viewBox="0 0 16 16"
+                    {!isDetail && (
+                        <span
+                            onClick={removeImage}
+                            className="opacity-90 cursor-pointer absolute bg-white rounded-full p-[5px] m-[3px] right-0"
                         >
-                            <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-                        </svg>
-                    </span>)}
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                fill="currentColor"
+                                className="bi bi-x-lg"
+                                viewBox="0 0 16 16"
+                            >
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+                            </svg>
+                        </span>
+                    )}
 
-                    <img
-                        src={imageUrl}
-                        alt="Uploaded"
-                    />
+                    <img src={imageUrl} alt="Uploaded" />
                 </div>
             )}
         </div>
     );
 }
 
-function HasListImage({ form, register, className, watch, control, setValue, isEdit, isDetail }) {
+function HasListImage({
+    form,
+    register,
+    className,
+    watch,
+    control,
+    setValue,
+    isEdit,
+    isDetail,
+}) {
     const { fields, append, remove } = useFieldArray({
         control,
-        name: form.name
-      });
-
+        name: form.name,
+    });
 
     function addImage(image) {
         if (image.length > 0) {
             append({
-                'image': [],
-                'link': '',
-                'alt': ''
-            })
+                image: [],
+                link: "",
+                alt: "",
+            });
         } else {
-            alert('Please, choose your image before add new')
+            alert("Please, choose your image before add new");
         }
     }
 
     function removeImage(key) {
-        remove(key)
+        remove(key);
     }
 
     useEffect(() => {
         if (fields.length < 1) {
             append({
-                'image': [],
-                'link': '',
-                'alt': ''
-            })
+                image: [],
+                link: "",
+                alt: "",
+            });
         }
-    })
+    });
     return (
         <div className={className}>
             {fields.map((item, key) => {
@@ -317,9 +355,7 @@ function HasListImage({ form, register, className, watch, control, setValue, isE
                                         Alt
                                     </label>
                                     <TextInput
-                                        {...register(
-                                            `${form.name}.${key}.alt`
-                                        )}
+                                        {...register(`${form.name}.${key}.alt`)}
                                         disabled={isDetail}
                                     />
                                 </div>
@@ -335,27 +371,39 @@ function HasListImage({ form, register, className, watch, control, setValue, isE
                         </div>
                         {!isDetail && (
                             <div className="w-1/4 flex gap-10">
-                            {key + 1 == fields.length && (
-                                <Button
-                                    className="bg-green-400"
-                                    onClick={() => addImage(watch(`${form.name}.${key}.image`))}
-                                >
-                                    <PlusIcon />
-                                </Button>
-                            )}
+                                {key + 1 == fields.length && (
+                                    <>
+                                        <Button
+                                            className="bg-green-400"
+                                            onClick={() =>
+                                                addImage(
+                                                    watch(
+                                                        `${form.name}.${key}.image`
+                                                    )
+                                                )
+                                            }
+                                        >
+                                            <PlusIcon />
+                                        </Button>
+                                        <Button
+                                            className="bg-red-400"
+                                            onClick={() => removeImage(key)}
+                                        >
+                                            <MinusIcon />
+                                        </Button>
+                                    </>
+                                )}
 
-                            {key + 1 < fields.length && (
-                                <Button
-                                    className="bg-red-400"
-                                    onClick={() => removeImage(key)}
-                                >
-                                    <MinusIcon />
-                                </Button>
-                            )}
-                        </div>
+                                {key + 1 < fields.length && (
+                                    <Button
+                                        className="bg-red-400"
+                                        onClick={() => removeImage(key)}
+                                    >
+                                        <MinusIcon />
+                                    </Button>
+                                )}
+                            </div>
                         )}
-
-
                     </div>
                 );
             })}
@@ -454,7 +502,7 @@ function DetectField({
     setValue,
     errors,
     isEdit,
-    isDetail
+    isDetail,
 }) {
     function renderForm() {
         switch (form.type) {
@@ -602,7 +650,7 @@ export default function FormGeneration({
     setValue,
     errors = [],
     isEdit = 0,
-    isDetail = 0
+    isDetail = 0,
 }) {
     return (
         <>

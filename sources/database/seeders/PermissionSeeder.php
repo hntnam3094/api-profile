@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -45,6 +46,16 @@ class PermissionSeeder extends Seeder
         }
 
         $user = User::where('email', 'admin@gmail.com')->first();
+
+        if (empty($user)) {
+            $user = new User();
+            $user->name = 'System Admin';
+            $user->password = Hash::make('test1234');
+            $user->email = 'admin@gmail.com';
+            $user->status = 1;
+            $user->save();
+        }
+
         $user->syncRoles([PermissionConstant::SYSTEM_ADMIN]);
     }
 }

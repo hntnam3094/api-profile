@@ -95,7 +95,7 @@ class StructionPagesController extends Controller
             abort(404);
         }
 
-        $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetailRecord);
+        $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetailRecord, $page_code, $code);
         $structionForm = $this->structionForm->getForm($page_code, $code);
 
         return Inertia::render('Office/Struction/FormDetail', [
@@ -133,7 +133,7 @@ class StructionPagesController extends Controller
             abort(404);
         }
 
-        $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetailRecord);
+        $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetailRecord, $page_code, $code);
         $structionForm = $this->structionForm->getForm($page_code, $code);
 
         return Inertia::render('Office/Struction/FormAdd', [
@@ -178,7 +178,7 @@ class StructionPagesController extends Controller
             if (empty($metaData)) {
                 abort(404);
             }
-            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail);
+            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail, $structionPage->pageCode, $structionPage->code);
 
             return Inertia::render('Office/Struction/FormDetail', [
                 'dataForm' => $data,
@@ -199,7 +199,7 @@ class StructionPagesController extends Controller
             if (empty($metaData)) {
                 abort(404);
             }
-            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail);
+            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail, $structionPage->pageCode, $structionPage->code);
 
             return Inertia::render('Office/Struction/FormAdd', [
                 'dataForm' => $data,

@@ -136,17 +136,18 @@ class StructionService {
 
             if (!empty($id) && !empty($attr)) {
                 foreach ($attr as $key => $value) {
+                    $type = $this->getKeyFormByInputKey($key, $pageCode, $code);
 
-                    if(in_array($key, $structionPageField)) {
+                    if(in_array($type, $structionPageField)) {
                         $this->structionDetailsRepository->update($id, [$key => $value]);
                         continue;
                     }
 
-                    if ($key === CommonConstant::IMAGE) {
+                    if ($type === CommonConstant::IMAGE) {
                         $value = $this->commonService->saveImages($value);
                     }
 
-                    if ($key === CommonConstant::IMAGES) {
+                    if ($type === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
                             $val['image'] = $this->commonService->saveImages($val['image'] ?? '');
                         }
@@ -170,6 +171,17 @@ class StructionService {
         }
     }
 
+    private function getKeyFormByInputKey ($key, $pageCode, $code) {
+        $form = $this->structionForm->getForm($pageCode, $code);
+        foreach ($form['form'] as $item) {
+            if ($item['name'] == $key) {
+                return $item['type'];
+            }
+        }
+
+        return $key;
+    }
+
     private function getPageCodeAndCode ($attr) {
         $pageCode = $attr['page_code'] ?? '';
         $code = $attr['code'] ?? '';
@@ -180,16 +192,17 @@ class StructionService {
         return [$attr, $pageCode, $code];
     }
 
-    public function getKeyValueByMeta ($metaData, $structionDetailRecord = null) {
+    public function getKeyValueByMeta ($metaData, $structionDetailRecord = null, $pageCode = null, $code = null) {
         $data = [];
-        foreach ($metaData as $key => $item) {
+        foreach ($metaData as $item) {
+            $type = $this->getKeyFormByInputKey($item->key, $pageCode, $code);
             $value = $item->value;
 
-            if ($item->key === CommonConstant::IMAGE) {
+            if ($type === CommonConstant::IMAGE) {
                 $value = Storage::url($item->value);
             }
 
-            if ($item->key === CommonConstant::IMAGES) {
+            if ($type === CommonConstant::IMAGES) {
                 $value = json_decode($value);
 
                 foreach($value as &$val) {
@@ -208,6 +221,18 @@ class StructionService {
             $data['sequence'] = $structionDetailRecord->sequence;
         }
 
-        return $data;
+        $structionForm = $this->structionForm->getForm($pageCode, $code);
+        $dataClone = $data;
+
+        if (!is_null($structionForm) && !empty($structionForm['form'])) {
+            $dataClone = [];
+            foreach ($structionForm['form'] as $item) {
+                if (isset($data[$item['name']])) {
+                    $dataClone[$item['name']] = $data[$item['name']];
+                }
+            }
+        }
+
+        return $dataClone;
     }
 }
