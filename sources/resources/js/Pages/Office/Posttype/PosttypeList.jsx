@@ -34,8 +34,8 @@ export default function PosttypeList({ data, posttype, form, params }) {
         }
     }
 
-    function renderField(obj, key) {
-        if (key === "image") {
+    function renderField(obj, key, type) {
+        if (type === "image") {
             return (
                 <img
                     src={`${obj[key]}`}
@@ -114,7 +114,7 @@ export default function PosttypeList({ data, posttype, form, params }) {
                                     form.list.length > 0 &&
                                     form.list.map((itemList, key) => (
                                         <Table.Cell key={key}>
-                                            {renderField(item, itemList.key)}
+                                            {renderField(item, itemList.key, itemList.type)}
                                         </Table.Cell>
                                     ))}
                                 <Table.Cell>

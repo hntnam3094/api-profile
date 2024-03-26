@@ -2,16 +2,41 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\CategoryService;
+use App\Http\Services\PostTypeService;
+use App\Http\Services\StructionService;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    private $structionService;
+    private $categoryService;
+    private $postTypeService;
+
+    public function __construct(
+        StructionService $structionService,
+        CategoryService $categoryService,
+        PostTypeService $postTypeService
+    )
+    {
+        $this->structionService = $structionService;
+        $this->categoryService = $categoryService;
+        $this->postTypeService = $postTypeService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('welcome');
+        $structionData = $this->structionService->getStructionData('home');
+        $categoryProduct = $this->categoryService->getCategoryData('product');
+        $productData = $this->postTypeService->getPosttypeData('product');
+
+        return view('welcome', [
+            'structionData' => $structionData,
+            'categoryProduct' => $categoryProduct,
+            'productData' => $productData
+        ]);
     }
 
     /**

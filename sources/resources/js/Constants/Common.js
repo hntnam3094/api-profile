@@ -19,6 +19,7 @@ export const FIELD_RADIO = 'radio'
 export const FIELD_TEXTAREA = 'textarea'
 export const FIELD_EDITOR = 'editor'
 export const FIELD_DATEPICKER = 'datepicker'
+export const FIELD_NUMBER = 'number'
 
 export function dateTimeFormat (date, format = 'YYYY-MM-DD H:mm:ss') {
     return moment(date).format(format)

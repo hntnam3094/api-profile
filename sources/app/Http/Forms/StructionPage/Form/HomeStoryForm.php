@@ -10,31 +10,14 @@ class HomeStoryForm {
 
     public $fieldList = [
         [
+            'type' => 'text',
             'key' => 'title',
             'name' => 'Title'
         ],
         [
+            'type' => 'image',
             'key' => 'image',
             'name' => 'Image'
-        ],
-    ];
-
-    public $fieldSearch = [
-        [
-            'type' => 'text',
-            'name' => 'title',
-            'label' => 'Title',
-            'value' => '',
-            'placeholder' => 'Enter your title',
-            'validate' => []
-        ],
-        [
-            'type' => 'select',
-            'name' => 'status',
-            'label' => 'Status',
-            'value' => 1,
-            'option' => OptionConstant::defaultStatus,
-            'validate' => [],
         ],
     ];
 
@@ -103,13 +86,41 @@ class HomeStoryForm {
             ]
         ],
         [
-            'type' => 'images',
-            'name' => 'listImage',
-            'label' => 'List Image',
+            'type' => 'image',
+            'name' => 'image_in_list_1',
+            'label' => 'Image in list 1',
             'value' => [],
             'validate' => [
-                'rules' => 'required'
+                'rules' => ['required']
             ]
         ],
+        [
+            'type' => 'image',
+            'name' => 'image_in_list_2',
+            'label' => 'Image in list 2',
+            'value' => [],
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'image',
+            'name' => 'image_in_list_3',
+            'label' => 'Image in list 3',
+            'value' => [],
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'image',
+            'name' => 'image_in_list_4',
+            'label' => 'Image in list 4',
+            'value' => [],
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+
     ];
 }

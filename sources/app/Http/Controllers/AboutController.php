@@ -2,16 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\StructionService;
 use Illuminate\Http\Request;
 
 class AboutController extends Controller
 {
+    private $structionService;
+
+    public function __construct(StructionService $structionService)
+    {
+        $this->structionService = $structionService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('about');
+        $data = $this->structionService->getStructionData('about_us', 'about_us');
+
+        return view('about', [
+            'data' => $data
+        ]);
     }
 
     /**

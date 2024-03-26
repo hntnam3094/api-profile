@@ -23,6 +23,7 @@ import {
     FIELD_EDITOR,
     FIELD_TEXTAREA,
     FIELD_IMAGES,
+    FIELD_NUMBER
 } from "@/Constants/Common";
 function HasImage({
     form,
@@ -148,9 +149,13 @@ function HasTextInput({
     }
 
     function convertToSlug(str) {
-        str = removeDiacritics(str.toLowerCase());
-        str = str.replace(/[^\w\s]/g, "");
-        str = str.replace(/\s+/g, "-");
+        console.log(str);
+        if (str) {
+            str = removeDiacritics(str.toLowerCase());
+            str = str.replace(/[^\w\s]/g, "");
+            str = str.replace(/\s+/g, "-");
+        }
+
         return str;
     }
 
@@ -466,7 +471,7 @@ function HasTextArea({ form, register, className }) {
     );
 }
 
-function HasEditor({ form, register, control, className }) {
+function HasEditor({ form, register, control, className, isDetail }) {
     return (
         <Editor
             form={form}
@@ -474,6 +479,7 @@ function HasEditor({ form, register, control, className }) {
             control={control}
             Controller={Controller}
             className={className}
+            disabled={isDetail || form.disabled}
         />
     );
 }
@@ -489,6 +495,20 @@ function HasDatepicker({ form, register, control, className }) {
                 )}
             />
         </>
+    );
+}
+
+function HasNumber({ form, register, control, className, isDetail }) {
+    return (
+        <TextInput
+            id={form.name}
+            defaultValue={form.value}
+            type="number"
+            {...register(form.name)}
+            className={`w-full ${className}`}
+            placeholder={form.placeholder}
+            disabled={isDetail || form.disabled}
+        />
     );
 }
 
@@ -618,6 +638,18 @@ function DetectField({
                         isDetail={isDetail}
                     />
                 );
+            }
+            case FIELD_NUMBER: {
+                return (
+                    <HasNumber
+                        form={form}
+                        register={register}
+                        watch={watch}
+                        control={control}
+                        className={className}
+                        isDetail={isDetail}
+                    />
+                )
             }
         }
     }

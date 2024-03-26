@@ -14,8 +14,8 @@ export default function CategoryList({ data, posttype, form }) {
         }
     }
 
-    function renderField(obj, key) {
-        if (key === 'image') {
+    function renderField(obj, key, type) {
+        if (type === 'image') {
             return <img src={`${obj[key]}`} className="w-[100%] h-[80px] rounded-sm object-cover" />;
         }
         return obj[key];
@@ -64,7 +64,7 @@ export default function CategoryList({ data, posttype, form }) {
                                     form.category_list.length > 0 &&
                                     form.category_list.map((itemList) => (
                                         <Table.Cell>
-                                            {renderField(item, itemList.key)}
+                                            {renderField(item, itemList.key, itemList.type)}
                                         </Table.Cell>
                                     ))}
                                 <Table.Cell>

@@ -4,21 +4,9 @@ namespace App\Http\Forms\StructionPage\Form;
 use App\Constants\FormConstant;
 use App\Constants\OptionConstant;
 
-class SliderTopForm {
-    public $pageCode = FormConstant::HOME;
-    public $code = FormConstant::HOME_SLIDER;
-    public $fieldList = [
-        [
-            'type' => 'text',
-            'key' => 'title',
-            'name' => 'Title'
-        ],
-        [
-            'type' => 'image',
-            'key' => 'image_cover',
-            'name' => 'Image'
-        ],
-    ];
+class AboutUsForm {
+    public $pageCode = FormConstant::ABOUT_US;
+    public $code = FormConstant::ABOUT_US;
 
     public $fieldSearch = [
         [
@@ -50,22 +38,14 @@ class SliderTopForm {
             ],
         ],
         [
-            'type' => 'text',
-            'name' => 'sub_title',
-            'label' => 'Sub title',
+            'type' => 'editor',
+            'name' => 'content',
+            'label' => 'Content',
             'value' => '',
             'validate' => [
-                'rules' => ['required']
-            ],
-        ],
-        [
-            'type' => 'image',
-            'name' => 'image_cover',
-            'label' => 'Image',
-            'value' => [],
-            'validate' => [
-                'rules' => ['required']
+                'rules' => 'required'
             ]
-        ],
+        ]
+
     ];
 }

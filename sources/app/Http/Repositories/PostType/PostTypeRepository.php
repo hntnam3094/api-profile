@@ -62,4 +62,49 @@ class PostTypeRepository extends BaseRepository {
                     ->appends($params);
     }
 
+    public function getByPostType ($postType, $categoryId = null) {
+        $query = $this->model->join('post_detail', function($join) {
+                            $join->on('post_type.id', '=', 'post_detail.postTypeId')
+                                ->whereNull('post_detail.deleted_at');
+                        })
+                        ->where('post_type.code', $postType)
+                        ->where('post_detail.status', CommonConstant::STATUS_ACTIVE);
+
+        if (!is_null($categoryId)) {
+            $query->join('post_map_category', function ($join) {
+                $join->on('post_detail.id', '=', 'post_map_category.postId')
+                    ->whereNull('post_map_category.deleted_at');
+            })
+            ->where('post_map_category.categoryId', $categoryId);
+        }
+
+        return $query->orderBy('post_detail.sequence', 'ASC')
+                    ->orderBy('post_detail.created_at', 'DESC')
+                    ->select('post_detail.*')
+                    ->get()->toArray();
+    }
+
+
+    public function getBySlug ($postType, $key, $slug) {
+        $query = $this->model
+                ->join('post_detail', function($join) {
+                    $join->on('post_type.id', '=', 'post_detail.postTypeId')
+                        ->whereNull('post_detail.deleted_at');
+                })
+                ->join('post_meta', function($join) {
+                    $join->on('post_detail.id', '=', 'post_meta.postDetailId')
+                        ->whereNull('post_meta.deleted_at');
+                })
+                ->where('post_type.code', $postType)
+                ->where('metaKey', $key)
+                ->where('metaValue', 'like', '%' . $slug . '%');
+
+
+        return $query->groupBy('post_meta.postDetailId')
+            ->orderBy('post_detail.sequence', 'ASC')
+            ->orderBy('post_detail.created_at', 'DESC')
+            ->select('post_detail.*')
+            ->first();
+    }
+
 }

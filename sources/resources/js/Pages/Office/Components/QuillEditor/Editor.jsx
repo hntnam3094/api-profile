@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import EditorToolbar, { modules, formats } from "./EditorToolbar";
 import "react-quill/dist/quill.snow.css";
 
-export const Editor = ({ form, register, control, Controller, className }) => {
+export const Editor = ({ form, register, control, Controller, className, disabled }) => {
   const [state, setState] = React.useState({ value: null });
   const handleChange = value => {
     setState({ value });
@@ -24,6 +24,7 @@ export const Editor = ({ form, register, control, Controller, className }) => {
                 modules={modules}
                 formats={formats}
                 className={`h-[400px] ${className}`}
+                readOnly={disabled}
             />
         )}
       />

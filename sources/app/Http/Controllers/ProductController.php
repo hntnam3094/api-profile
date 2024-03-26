@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\CategoryService;
+use App\Http\Services\PostTypeService;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    private $categoryService;
+    private $postTypeService;
+
+    public function __construct(CategoryService $categoryService, PostTypeService $postTypeService)
+    {
+        $this->categoryService = $categoryService;
+        $this->postTypeService = $postTypeService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('product');
+        $data = $this->categoryService->getCategoryAndPostTypeData('product');
+        return view('product', ['data' => $data]);
     }
 
     /**
@@ -33,9 +45,14 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        if (empty($slug)) {
+            return view('404');
+        }
+
+        $data = $this->postTypeService->getBySlug('product', $slug);
+
     }
 
     /**

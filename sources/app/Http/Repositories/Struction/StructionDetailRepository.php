@@ -41,4 +41,11 @@ class StructionDetailRepository extends BaseRepository {
     public function getFirstByStructionPageId ($id) {
         return $this->model->where('structionPageId', $id)->first();
     }
+
+    public function getByStructionPageIdForView ($id) {
+        $query = $this->model->where('structionPageId', $id);
+        return $query->orderBy('sequence', 'ASC')
+                    ->orderBy('created_at', 'DESC')
+                    ->get()->toArray();
+    }
 }

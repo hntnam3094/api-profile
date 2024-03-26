@@ -27,6 +27,7 @@ class CategoryController extends Controller
     {
         $postType = $request->get('posttype');
         $data = $this->categoryService->getPaginationsByPostType($postType);
+
         return Inertia::render('Office/Category/CategoryList', [
             'data' => $data,
             'posttype' => $postType,

@@ -10,10 +10,11 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto">
-                    <a href="/" class="nav-item nav-link active">Home</a>
-                    <a href="about.html" class="nav-item nav-link">About</a>
-                    <a href="product.html" class="nav-item nav-link">Products</a>
-                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                    <a href="/" class="nav-item nav-link active">Trang chủ</a>
+                    <a href="ve-chung-toi.html" class="nav-item nav-link">Về chúng tôi</a>
+                    <a href="gom.html" class="nav-item nav-link">Booking - làm gốm</a>
+                    <a href="san-pham.html" class="nav-item nav-link">Sản phẩm</a>
+                    <a href="lien-he.html" class="nav-item nav-link">Liên hệ</a>
                 </div>
                 {{-- <div class="border-start ps-4 d-none d-lg-block">
                     <button type="button" class="btn btn-sm p-0"><i class="fa fa-search"></i></button>

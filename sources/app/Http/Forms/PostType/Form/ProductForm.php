@@ -12,8 +12,8 @@ class ProductForm {
     public $fieldSearch = [
         [
             'type' => 'text',
-            'name' => 'title',
-            'label' => 'Title',
+            'name' => 'name',
+            'label' => 'Name',
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => []
@@ -24,7 +24,7 @@ class ProductForm {
             'label' => 'Category',
             'value' => '',
             'option' => PostTypeConstant::listTreeCategory,
-            'metaValue' => 'title',
+            'metaValue' => 'name',
             'validate' => [],
         ],
         [
@@ -40,8 +40,8 @@ class ProductForm {
     public $fieldForm = [
         [
             'type' => 'text',
-            'name' => 'title',
-            'label' => 'Title',
+            'name' => 'name',
+            'label' => 'Name',
             'value' => '',
             'placeholder' => 'Enter your title',
             'validate' => [
@@ -53,15 +53,35 @@ class ProductForm {
             'name' => 'slug',
             'label' => 'Slug',
             'value' => '',
-            'slugOfField' => 'title',
+            'slugOfField' => 'name',
             'placeholder' => 'Enter your title',
             'validate' => [
                 'rules' => ['required']
             ]
         ],
         [
+            'type' => 'textarea',
+            'name' => 'description',
+            'label' => 'Description',
+            'value' => '',
+            'placeholder' => 'Enter your description',
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'number',
+            'name' => 'price',
+            'label' => 'Price',
+            'value' => '',
+            'placeholder' => 'Enter your price',
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
             'type' => 'image',
-            'name' => 'image',
+            'name' => 'avatar',
             'label' => 'Image',
             'value' => [],
             'validate' => [
@@ -69,8 +89,17 @@ class ProductForm {
             ]
         ],
         [
+            'type' => 'image',
+            'name' => 'banner',
+            'label' => 'Banner',
+            'value' => [],
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
             'type' => 'images',
-            'name' => 'images',
+            'name' => 'list_image',
             'label' => 'Images',
             'value' => [],
             'validate' => [
@@ -78,21 +107,12 @@ class ProductForm {
             ]
         ],
         [
-            'type' => 'text',
-            'name' => 'link',
-            'label' => 'Link',
-            'value' => '',
-            'validate' => [
-                'rules' => ['required']
-            ],
-        ],
-        [
             'type' => 'select',
             'name' => PostTypeConstant::fieldCategory,
             'label' => 'Category',
             'value' => '',
             'option' => PostTypeConstant::listTreeCategory,
-            'metaValue' => 'title',
+            'metaValue' => 'name',
             'validate' => [
                 'rules' => ['required']
             ],
@@ -102,10 +122,20 @@ class ProductForm {
     public $fieldCategory = [
         [
             'type' => 'text',
-            'name' => 'title',
-            'label' => 'Title',
+            'name' => 'name',
+            'label' => 'Name',
             'value' => '',
             'placeholder' => 'Enter your title',
+            'validate' => [
+                'rules' => ['required']
+            ]
+        ],
+        [
+            'type' => 'text',
+            'name' => 'description',
+            'label' => 'Description',
+            'value' => '',
+            'placeholder' => 'Enter your description',
             'validate' => [
                 'rules' => ['required']
             ]
@@ -115,7 +145,7 @@ class ProductForm {
             'name' => 'slug',
             'label' => 'Slug',
             'value' => '',
-            'slugOfField' => 'title',
+            'slugOfField' => 'name',
             'placeholder' => 'Enter your title',
             'validate' => [
                 'rules' => ['required']
@@ -129,35 +159,30 @@ class ProductForm {
             'validate' => [
                 'rules' => ['required']
             ]
-        ],
-        [
-            'type' => 'select',
-            'name' => 'parentId',
-            'label' => 'Parent Category',
-            'value' => '',
-            'option' => PostTypeConstant::listTreeCategory,
-            'metaValue' => 'title',
-            'validate' => [],
-        ],
+        ]
     ];
 
     public $fieldList = [
         [
-            'key' => 'title',
-            'name' => 'Title'
+            'type' => 'text',
+            'key' => 'name',
+            'name' => 'Name'
         ],
         [
-            'key' => 'image',
-            'name' => 'Image'
+            'type' => 'image',
+            'key' => 'avatar',
+            'name' => 'Avatar'
         ],
     ];
 
     public $fieldCategoryList = [
         [
-            'key' => 'title',
-            'name' => 'Title'
+            'type' => 'text',
+            'key' => 'name',
+            'name' => 'Name'
         ],
         [
+            'type' => 'image',
             'key' => 'image',
             'name' => 'Image'
         ],

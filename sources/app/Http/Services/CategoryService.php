@@ -15,18 +15,21 @@ class CategoryService {
     private $categoryMetaReposioty;
     private $commonService;
     private $postTypeForm;
+    private $postTypeService;
 
     public function __construct(
         CategoryRepository $categoryRepository,
         CategoryMetaRepository $categoryMetaReposioty,
         CommonService $commonService,
-        PostTypeForm $postTypeForm
+        PostTypeForm $postTypeForm,
+        PostTypeService $postTypeService
     )
     {
         $this->categoryRepository = $categoryRepository;
         $this->categoryMetaReposioty = $categoryMetaReposioty;
         $this->commonService = $commonService;
         $this->postTypeForm = $postTypeForm;
+        $this->postTypeService = $postTypeService;
     }
 
     public function getPaginationsByPostType ($postType) {
@@ -40,7 +43,8 @@ class CategoryService {
                     $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail->id, $listField);
                     if (!empty($postMeta)) {
                         foreach ($postMeta as $meta) {
-                            if ($meta->metaKey == CommonConstant::IMAGE) {
+                            $type = $this->getKeyFormByInputKey($meta->metaKey, $postType);
+                            if ($type == CommonConstant::IMAGE) {
                                 $meta->metaValue = Storage::url($meta->metaValue);
                             }
                             $categoryDetail[$meta->metaKey] = $meta->metaValue;
@@ -64,7 +68,7 @@ class CategoryService {
                 $form = $this->postTypeForm->getForm($postType, $id);
                 $dataForm = [];
 
-                $dataForm = $this->getKeyValueByMeta($category->categoryMeta, $category);
+                $dataForm = $this->getKeyValueByMeta($category->categoryMeta, $postType, $category);
 
                 return [$dataForm, $form, $postType];
             }
@@ -102,6 +106,7 @@ class CategoryService {
 
             if (!empty($id) && !empty($attr)) {
                 foreach ($attr as $key => $value) {
+                    $type = $this->getKeyFormByInputKey($key, $postType);
 
                     if(in_array($key, $structionPageField)) {
                         if (($key == 'parentId' && (empty($value) || $value == $id))) {
@@ -112,11 +117,12 @@ class CategoryService {
                         continue;
                     }
 
-                    if ($key === CommonConstant::IMAGE) {
+
+                    if ($type === CommonConstant::IMAGE) {
                         $value = $this->commonService->saveImages($value);
                     }
 
-                    if ($key === CommonConstant::IMAGES) {
+                    if ($type === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
                             $val['image'] = $this->commonService->saveImages($val['image'] ?? '');
                         }
@@ -161,16 +167,17 @@ class CategoryService {
         return $newArr;
     }
 
-    private function getKeyValueByMeta ($metaData, $postDetail = null) {
+    private function getKeyValueByMeta ($metaData, $postType, $postDetail = null) {
         $data = [];
         foreach ($metaData as $key => $item) {
+            $type = $this->getKeyFormByInputKey($item->metaKey, $postType);
             $value = $item->metaValue;
 
-            if ($item->metaKey === CommonConstant::IMAGE) {
+            if ($type === CommonConstant::IMAGE) {
                 $value = Storage::url($item->metaValue);
             }
 
-            if ($item->metaKey === CommonConstant::IMAGES) {
+            if ($type === CommonConstant::IMAGES) {
                 $value = json_decode($value);
 
                 foreach($value as &$val) {
@@ -191,5 +198,66 @@ class CategoryService {
         }
 
         return $data;
+    }
+
+    private function getKeyFormByInputKey ($key, $postType) {
+        $form = $this->postTypeForm->getForm($postType, false, PostTypeConstant::fieldCategory);
+        foreach ($form as $item) {
+            if ($item['name'] == $key) {
+                return $item['type'];
+            }
+        }
+
+        return $key;
+    }
+
+    public function getCategoryData($postType) {
+        if ($postType) {
+            $listCategory = $this->categoryRepository->getByPostType($postType);
+            if (count($listCategory) > 0) {
+                foreach ($listCategory as &$categoryDetail) {
+                    $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail['id']);
+                    if (!empty($postMeta)) {
+                        foreach ($postMeta as $meta) {
+                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                            if ($type == CommonConstant::IMAGE) {
+                                $meta['metaValue'] = Storage::url($meta['metaValue']);
+                            }
+                            $categoryDetail[$meta['metaKey']] = $meta['metaValue'];
+                        }
+                    }
+                }
+            }
+
+            return $listCategory;
+        }
+
+        return [];
+    }
+
+    public function getCategoryAndPostTypeData($postType) {
+        if ($postType) {
+            $listCategory = $this->categoryRepository->getByPostType($postType);
+            if (count($listCategory) > 0) {
+                foreach ($listCategory as &$categoryDetail) {
+                    $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail['id']);
+                    if (!empty($postMeta)) {
+                        foreach ($postMeta as $meta) {
+                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                            if ($type == CommonConstant::IMAGE) {
+                                $meta['metaValue'] = Storage::url($meta['metaValue']);
+                            }
+                            $categoryDetail[$meta['metaKey']] = $meta['metaValue'];
+                        }
+                    }
+
+                    $categoryDetail['data'] = $this->postTypeService->getPosttypeDataByCategoryId($postType, $categoryDetail['id']);
+                }
+            }
+
+            return $listCategory;
+        }
+
+        return [];
     }
 }

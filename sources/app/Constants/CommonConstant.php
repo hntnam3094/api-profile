@@ -7,4 +7,6 @@ class CommonConstant {
     public const IMAGES = 'images';
     public const STATUS = 'status';
     public const SLUG = 'slug';
+
+    public const STATUS_ACTIVE = 1;
 }

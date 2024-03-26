@@ -151,7 +151,7 @@ export default function StructionPage({
                                                 <Table.Cell>
                                                     {renderField(
                                                         item,
-                                                        itemList.key
+                                                        itemList.type
                                                     )}
                                                 </Table.Cell>
                                             ))}

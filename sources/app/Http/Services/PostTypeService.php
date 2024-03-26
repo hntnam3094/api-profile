@@ -55,7 +55,8 @@ class PostTypeService {
                     $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id, $listField);
                     if (!empty($postMeta)) {
                         foreach ($postMeta as $meta) {
-                            if ($meta->metaKey == CommonConstant::IMAGE) {
+                            $type = $this->getKeyFormByInputKey($meta->metaKey, $postType);
+                            if ($type == CommonConstant::IMAGE) {
                                 $meta->metaValue = Storage::url($meta->metaValue);
                             }
                             $postDetail[$meta->metaKey] = $meta->metaValue;
@@ -79,7 +80,7 @@ class PostTypeService {
                 $dataForm = [];
 
                 if (!empty($postDetailId)) {
-                    $dataForm = $this->getKeyValueByMeta($postDetail->postMeta, $postDetail);
+                    $dataForm = $this->getKeyValueByMeta($postDetail->postMeta, $postType, $postDetail);
                 }
 
                 return [$dataForm, $form, $postType];
@@ -88,16 +89,17 @@ class PostTypeService {
         return [];
     }
 
-    private function getKeyValueByMeta ($metaData, $postDetail = null) {
+    private function getKeyValueByMeta ($metaData, $postType,  $postDetail = null) {
         $data = [];
         foreach ($metaData as $key => $item) {
+            $type = $this->getKeyFormByInputKey($item->metaKey, $postType);
             $value = $item->metaValue;
 
-            if ($item->metaKey === CommonConstant::IMAGE) {
+            if ($type === CommonConstant::IMAGE) {
                 $value = Storage::url($item->metaValue);
             }
 
-            if ($item->metaKey === CommonConstant::IMAGES) {
+            if ($type === CommonConstant::IMAGES) {
                 $value = json_decode($value);
 
                 foreach($value as &$val) {
@@ -152,17 +154,18 @@ class PostTypeService {
 
             if (!empty($id) && !empty($attr)) {
                 foreach ($attr as $key => $value) {
+                    $type = $this->getKeyFormByInputKey($key, $postType);
 
                     if(in_array($key, $structionPageField)) {
                         $this->postDetailRepository->update($id, [$key => $value]);
                         continue;
                     }
 
-                    if ($key === CommonConstant::IMAGE) {
+                    if ($type === CommonConstant::IMAGE) {
                         $value = $this->commonService->saveImages($value);
                     }
 
-                    if ($key === CommonConstant::IMAGES) {
+                    if ($type === CommonConstant::IMAGES) {
                         foreach ($value as &$val) {
                             $val['image'] = $this->commonService->saveImages($val['image'] ?? '');
                         }
@@ -171,6 +174,7 @@ class PostTypeService {
                     }
 
                     if ($key === PostTypeConstant::fieldCategory) {
+
                         $this->postMapCategoryRepository->create([
                             'postId' => $id,
                             'categoryId' => $value
@@ -214,4 +218,71 @@ class PostTypeService {
         return $newArr;
     }
 
+    private function getKeyFormByInputKey ($key, $postType) {
+        $form = $this->postTypeForm->getForm($postType, false, PostTypeConstant::fieldForm);
+        foreach ($form as $item) {
+            if ($item['name'] == $key) {
+                return $item['type'];
+            }
+        }
+
+        return $key;
+    }
+
+    public function getPosttypeData ($postType) {
+        if (!empty($postType)) {
+            $listPostDetail = $this->postTypeRepository->getByPostType($postType);
+
+            if (count($listPostDetail) > 0) {
+                foreach ($listPostDetail as &$postDetail) {
+                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail['id']);
+                    if (!empty($postMeta)) {
+                        foreach ($postMeta as $meta) {
+                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                            if ($type == CommonConstant::IMAGE) {
+                                $meta['metaValue'] = Storage::url($meta['metaValue']);
+                            }
+                            $postDetail[$meta['metaKey']] = $meta['metaValue'];
+                        }
+                    }
+                }
+            }
+
+            return $listPostDetail;
+        }
+        return [];
+    }
+
+    public function getPosttypeDataByCategoryId ($postType, $categoryId) {
+        if (!empty($postType)) {
+            $listPostDetail = $this->postTypeRepository->getByPostType($postType, $categoryId);
+
+            if (count($listPostDetail) > 0) {
+                foreach ($listPostDetail as &$postDetail) {
+                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail['id']);
+                    if (!empty($postMeta)) {
+                        foreach ($postMeta as $meta) {
+                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                            if ($type == CommonConstant::IMAGE) {
+                                $meta['metaValue'] = Storage::url($meta['metaValue']);
+                            }
+                            $postDetail[$meta['metaKey']] = $meta['metaValue'];
+                        }
+                    }
+                }
+            }
+
+            return $listPostDetail;
+        }
+        return [];
+    }
+
+    public function getBySlug ($postType, $slug) {
+        if (!empty($slug)) {
+            $data = $this->postTypeRepository->getBySlug($postType, $slug);
+            dd($data);
+        }
+
+        return [];
+    }
 }

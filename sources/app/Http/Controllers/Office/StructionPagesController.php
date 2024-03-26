@@ -73,19 +73,8 @@ class StructionPagesController extends Controller
      */
     public function show (Request $request, $id)
     {
-        $is_list = $request->get('is_list');
-        if ($is_list) {
-            list($data, $code, $page_code, $form, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
-
-            return Inertia::render('Office/Struction/StructionPage', [
-                'id' => $id,
-                'data' => $data,
-                'islist' => 0,
-                'pageCode' => $page_code,
-                'code' => $code,
-                'form' => $form,
-                'params' => $defaultParams
-            ]);
+        if ($rediectExpection = $this->redirectExpectionPage($request, $id)) {
+            return $rediectExpection;
         }
 
         $metaData = $this->structionService->getStructionMetaByStructionDetailId($id);
@@ -112,19 +101,8 @@ class StructionPagesController extends Controller
      */
     public function edit (Request $request, string $id)
     {
-        $is_list = $request->get('is_list');
-        if ($is_list) {
-            list($data, $code, $page_code, $form, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
-
-            return Inertia::render('Office/Struction/StructionPage', [
-                'id' => $id,
-                'data' => $data,
-                'islist' => 0,
-                'pageCode' => $page_code,
-                'code' => $code,
-                'form' => $form,
-                'params' => $defaultParams
-            ]);
+        if ($rediectExpection = $this->redirectExpectionPage($request, $id)) {
+            return $rediectExpection;
         }
 
         $metaData = $this->structionService->getStructionMetaByStructionDetailId($id);
@@ -152,7 +130,6 @@ class StructionPagesController extends Controller
     public function update(StructionRequest $request, string $id)
     {
         $structionPageId = $this->structionService->getStructionPageIdByStructionDetailId($id);
-
         $this->structionService->save($request->all(), $id);
         return redirect()->to(route('structionpages.detail', ['id' => $structionPageId, 'is_list' => 1]));
     }
@@ -171,19 +148,27 @@ class StructionPagesController extends Controller
 
     public function singleShow ($id) {
         $structionPage = $this->structionService->getStructionPageById($id);
+        if ($rediectExpection = $this->rediectExpectionList($structionPage)) {
+            return $rediectExpection;
+        }
+
         if ($structionPage) {
             $structionForm = $this->structionForm->getForm($structionPage->pageCode, $structionPage->code);
             $structionDetail = $this->structionService->getSingleStructionDetailByStructionPageId($structionPage->id);
-            $metaData = $this->structionService->getStructionMetaByStructionDetailId($structionDetail->id);
-            if (empty($metaData)) {
-                abort(404);
+            $data = [];
+            if (!empty($structionDetail)) {
+                $metaData = $this->structionService->getStructionMetaByStructionDetailId($structionDetail->id);
+                if (empty($metaData)) {
+                    abort(404);
+                }
+                $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail, $structionPage->pageCode, $structionPage->code);
+
             }
-            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail, $structionPage->pageCode, $structionPage->code);
 
             return Inertia::render('Office/Struction/FormDetail', [
                 'dataForm' => $data,
                 'structionForm' => $structionForm,
-                'id' => $structionDetail->id,
+                'id' => $structionDetail->id ?? 0,
                 'structionPageId' => $id,
                 'singleRow' => 1
             ]);
@@ -192,19 +177,27 @@ class StructionPagesController extends Controller
 
     public function singleEdit ($id) {
         $structionPage = $this->structionService->getStructionPageById($id);
+        if ($rediectExpection = $this->rediectExpectionList($structionPage)) {
+            return $rediectExpection;
+        }
+
         if ($structionPage) {
             $structionForm = $this->structionForm->getForm($structionPage->pageCode, $structionPage->code);
             $structionDetail = $this->structionService->getSingleStructionDetailByStructionPageId($id);
-            $metaData = $this->structionService->getStructionMetaByStructionDetailId($structionDetail->id);
-            if (empty($metaData)) {
-                abort(404);
+
+            $data = [];
+            if (!empty($structionDetail)) {
+                $metaData = $this->structionService->getStructionMetaByStructionDetailId($structionDetail->id);
+                if (empty($metaData)) {
+                    abort(404);
+                }
+                $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail, $structionPage->pageCode, $structionPage->code);
             }
-            $data = $this->structionService->getKeyValueByMeta($metaData, $structionDetail, $structionPage->pageCode, $structionPage->code);
 
             return Inertia::render('Office/Struction/FormAdd', [
                 'dataForm' => $data,
                 'structionForm' => $structionForm,
-                'id' => $structionDetail->id,
+                'id' => $structionDetail->id ?? 0,
                 'structionPageId' => $id,
                 'pageCode' => $structionPage->pageCode,
                 'code' => $structionPage->code,
@@ -226,5 +219,37 @@ class StructionPagesController extends Controller
 
             return redirect()->to(route('structionpages.index'));
         }
+    }
+
+    private function redirectExpectionPage ($request, $id) {
+        $is_list = $request->get('is_list');
+        if ($is_list) {
+
+            $structionPageData = $this->structionService->getStructionPageById($id);
+            if (!empty($structionPageData->singleRow)) {
+                return redirect()->to(route('structionpages.single_detail', ['id' => $id]));
+            }
+
+            list($data, $code, $page_code, $form, $defaultParams) = $this->structionService->getStructionDetailByStructionPageId($id, $request->all());
+
+            return Inertia::render('Office/Struction/StructionPage', [
+                'id' => $id,
+                'data' => $data,
+                'islist' => 0,
+                'pageCode' => $page_code,
+                'code' => $code,
+                'form' => $form,
+                'params' => $defaultParams
+            ]);
+        }
+
+        return false;
+    }
+
+    private function rediectExpectionList ($structionPage) {
+        if (empty($structionPage->singleRow)) {
+            return redirect()->to(route('structionpages.detail', ['id' => $structionPage->id, 'is_list' => 1]));
+        }
+        return false;
     }
 }

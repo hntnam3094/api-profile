@@ -18,4 +18,12 @@ class CategoryRepository extends BaseRepository {
                         ->paginate(CommonConstant::PAGINATION_LIMIT)
                         ->appends(["posttype" => $postType]);
     }
+
+    public function getByPostType ($postType) {
+        return $this->model->where('postType', $postType)
+                        ->orderBy('sequence', 'ASC')
+                        ->orderBy('created_at', 'DESC')
+                        ->where('status', CommonConstant::STATUS_ACTIVE)
+                        ->get()->toArray();
+    }
 }

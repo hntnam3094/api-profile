@@ -167,7 +167,6 @@
     bottom: 0;
     display: flex;
     align-items: center;
-    background: rgba(136, 180, 78, .7);
     z-index: 1;
 }
 
@@ -190,7 +189,7 @@
         position: relative;
         min-height: 450px;
     }
-    
+
     #header-carousel .carousel-item img {
         position: absolute;
         width: 100%;
@@ -216,7 +215,7 @@
 
 
 /*** Section Title ***/
-.section-title {
+/* .section-title {
     position: relative;
     margin-bottom: 3rem;
     padding-bottom: 2rem;
@@ -250,7 +249,7 @@
 
 .section-title.text-center::after {
     left: calc(50% - 13px);
-}
+} */
 
 
 /*** Products ***/

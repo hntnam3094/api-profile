@@ -4,12 +4,9 @@ use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Office\PermissionsController;
-use App\Http\Controllers\Office\PosttypeController;
 use App\Http\Controllers\Office\StructionPagesController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -25,16 +22,19 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/about.html', [AboutController::class, 'index'])->name('about.index');
-Route::get('/product.html', [ProductController::class, 'index'])->name('product.index');
-Route::get('/contact.html', [ContactController::class, 'index'])->name('contact.index');
+Route::get('/ve-chung-toi.html', [AboutController::class, 'index'])->name('about.index');
+Route::get('/gom.html', [AboutController::class, 'show'])->name('about.detail');
+Route::get('/san-pham.html', [ProductController::class, 'index'])->name('product.index');
+Route::get('/san-pham/{slug}.html', [ProductController::class, 'show'])->name('product.detail');
+Route::get('/lien-he.html', [ContactController::class, 'index'])->name('contact.index');
+
 
 Route::prefix('/office')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::middleware('auth')->group(function () {
+    Route::middleware(['auth', 'data'])->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -45,9 +45,9 @@ Route::prefix('/office')->group(function () {
         });
     });
 
-    Route::get('/single_detail/{id}', [StructionPagesController::class, 'singleShow'])->name('structionpages.single_detail');
-    Route::get('/single_edit/{id}', [StructionPagesController::class, 'singleEdit'])->name('structionpages.single_edit');
-    Route::post('/single_update/{id}', [StructionPagesController::class, 'singleUpdate'])->name('structionpages.single_update');
+    Route::get('/structionpages/single_detail/{id}', [StructionPagesController::class, 'singleShow'])->name('structionpages.single_detail');
+    Route::get('/structionpages/single_edit/{id}', [StructionPagesController::class, 'singleEdit'])->name('structionpages.single_edit');
+    Route::post('/structionpages/single_update/{id}', [StructionPagesController::class, 'singleUpdate'])->name('structionpages.single_update');
 });
 
 require __DIR__.'/auth.php';

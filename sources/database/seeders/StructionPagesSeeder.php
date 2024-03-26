@@ -28,6 +28,12 @@ class StructionPagesSeeder extends Seeder
                 'code' => FormConstant::HOME_STORY,
                 'singleRow' => 1,
                 'title' => FormConstant::HOME_STORY_NAME
+            ],
+            [
+                'pageCode' => FormConstant::ABOUT_US,
+                'code' => FormConstant::ABOUT_US,
+                'singleRow' => 1,
+                'title' => FormConstant::ABOUT_US_NAME
             ]
         ]);
     }

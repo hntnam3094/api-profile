@@ -159,7 +159,9 @@ class PostTypeForm {
                 $cateMeta = CategoryMeta::where('categoryId', $cate->id)
                                 ->where('metaKey', $value)
                                 ->select('metaValue')->first();
-
+                if (empty($cateMeta)) {
+                    continue;
+                }
                 $options[] = [
                     'key' => $cate->id,
                     'value' => $this->getPrefix($node) .' '. $cateMeta->metaValue,
