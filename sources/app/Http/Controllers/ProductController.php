@@ -26,6 +26,12 @@ class ProductController extends Controller
         return view('product', ['data' => $data]);
     }
 
+
+    public function index2 () {
+        $data = $this->postTypeService->getPosttypeData('booking');
+        return view('booking', ['data' => $data]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -52,7 +58,11 @@ class ProductController extends Controller
         }
 
         $data = $this->postTypeService->getBySlug('product', $slug);
+        if (empty($data)) {
+            return view('404');
+        }
 
+        return view('product_detail', ['data' => $data]);
     }
 
     /**

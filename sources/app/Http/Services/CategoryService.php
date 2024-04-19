@@ -215,17 +215,21 @@ class CategoryService {
         if ($postType) {
             $listCategory = $this->categoryRepository->getByPostType($postType);
             if (count($listCategory) > 0) {
-                foreach ($listCategory as &$categoryDetail) {
-                    $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail['id']);
-                    if (!empty($postMeta)) {
-                        foreach ($postMeta as $meta) {
-                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
-                            if ($type == CommonConstant::IMAGE) {
-                                $meta['metaValue'] = Storage::url($meta['metaValue']);
-                            }
-                            $categoryDetail[$meta['metaKey']] = $meta['metaValue'];
-                        }
+                return [];
+            }
+
+            foreach ($listCategory as &$categoryDetail) {
+                $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail['id']);
+                if (empty($postMeta)) {
+                    continue;
+                }
+
+                foreach ($postMeta as $meta) {
+                    $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                    if ($type == CommonConstant::IMAGE) {
+                        $meta['metaValue'] = Storage::url($meta['metaValue']);
                     }
+                    $categoryDetail[$meta['metaKey']] = $meta['metaValue'];
                 }
             }
 
@@ -238,21 +242,25 @@ class CategoryService {
     public function getCategoryAndPostTypeData($postType) {
         if ($postType) {
             $listCategory = $this->categoryRepository->getByPostType($postType);
-            if (count($listCategory) > 0) {
-                foreach ($listCategory as &$categoryDetail) {
-                    $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail['id']);
-                    if (!empty($postMeta)) {
-                        foreach ($postMeta as $meta) {
-                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
-                            if ($type == CommonConstant::IMAGE) {
-                                $meta['metaValue'] = Storage::url($meta['metaValue']);
-                            }
-                            $categoryDetail[$meta['metaKey']] = $meta['metaValue'];
-                        }
-                    }
+            if (!count($listCategory) > 0) {
+                return [];
+            }
 
-                    $categoryDetail['data'] = $this->postTypeService->getPosttypeDataByCategoryId($postType, $categoryDetail['id']);
+            foreach ($listCategory as &$categoryDetail) {
+                $postMeta = $this->categoryMetaReposioty->getByCategoryId($categoryDetail['id']);
+                if (empty($postMeta)) {
+                    continue;
                 }
+
+                foreach ($postMeta as $meta) {
+                    $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                    if ($type == CommonConstant::IMAGE) {
+                        $meta['metaValue'] = Storage::url($meta['metaValue']);
+                    }
+                    $categoryDetail[$meta['metaKey']] = $meta['metaValue'];
+                }
+
+                $categoryDetail['data'] = $this->postTypeService->getPosttypeDataByCategoryId($postType, $categoryDetail['id']);
             }
 
             return $listCategory;

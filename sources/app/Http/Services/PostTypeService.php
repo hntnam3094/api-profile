@@ -52,16 +52,7 @@ class PostTypeService {
 
             if (count($listPostDetail) > 0) {
                 foreach ($listPostDetail as &$postDetail) {
-                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail->id, $listField);
-                    if (!empty($postMeta)) {
-                        foreach ($postMeta as $meta) {
-                            $type = $this->getKeyFormByInputKey($meta->metaKey, $postType);
-                            if ($type == CommonConstant::IMAGE) {
-                                $meta->metaValue = Storage::url($meta->metaValue);
-                            }
-                            $postDetail[$meta->metaKey] = $meta->metaValue;
-                        }
-                    }
+                    $postDetail = $this->setPostMetaForDetail($postType, $postDetail, $postDetail->id, $listField);
                 }
             }
 
@@ -235,16 +226,7 @@ class PostTypeService {
 
             if (count($listPostDetail) > 0) {
                 foreach ($listPostDetail as &$postDetail) {
-                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail['id']);
-                    if (!empty($postMeta)) {
-                        foreach ($postMeta as $meta) {
-                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
-                            if ($type == CommonConstant::IMAGE) {
-                                $meta['metaValue'] = Storage::url($meta['metaValue']);
-                            }
-                            $postDetail[$meta['metaKey']] = $meta['metaValue'];
-                        }
-                    }
+                    $postDetail = $this->setPostMetaForDetail($postType, $postDetail, $postDetail['id']);
                 }
             }
 
@@ -259,16 +241,7 @@ class PostTypeService {
 
             if (count($listPostDetail) > 0) {
                 foreach ($listPostDetail as &$postDetail) {
-                    $postMeta = $this->postMetaRepository->getByPostDetailId($postDetail['id']);
-                    if (!empty($postMeta)) {
-                        foreach ($postMeta as $meta) {
-                            $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
-                            if ($type == CommonConstant::IMAGE) {
-                                $meta['metaValue'] = Storage::url($meta['metaValue']);
-                            }
-                            $postDetail[$meta['metaKey']] = $meta['metaValue'];
-                        }
-                    }
+                    $postDetail = $this->setPostMetaForDetail($postType, $postDetail, $postDetail['id']);
                 }
             }
 
@@ -280,9 +253,31 @@ class PostTypeService {
     public function getBySlug ($postType, $slug) {
         if (!empty($slug)) {
             $data = $this->postTypeRepository->getBySlug($postType, $slug);
-            dd($data);
+
+            if (empty($data)) {
+                return [];
+            }
+
+            $data = $this->setPostMetaForDetail($postType, $data, $data['id']);
+
+            return $data;
         }
 
         return [];
+    }
+
+    private function setPostMetaForDetail ($postType, $data, $id, $listField = []) {
+        $postMeta = $this->postMetaRepository->getByPostDetailId($id, $listField);
+        if (!empty($postMeta)) {
+            foreach ($postMeta as $meta) {
+                $type = $this->getKeyFormByInputKey($meta['metaKey'], $postType);
+                if ($type == CommonConstant::IMAGE) {
+                    $meta['metaValue'] = Storage::url($meta['metaValue']);
+                }
+                $data[$meta['metaKey']] = $meta['metaValue'];
+            }
+        }
+
+        return $data;
     }
 }

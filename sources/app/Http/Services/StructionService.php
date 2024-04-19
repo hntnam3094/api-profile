@@ -240,64 +240,69 @@ class StructionService {
 
     public function getStructionData ($pageCode, $code = null) {
         $listData = [];
-        if (!empty($pageCode)) {
-            $structionPage = $this->structionPagesRepository->getByPageCodeAndCodeForView($pageCode, $code);
-            foreach ($structionPage as $page) {
-                if (empty($page['id'])) {
-                    continue;
-                }
+        if (empty($pageCode)) {
+            return $listData;
+        }
 
-                $structionDetail = $this->getStructionDetail($page['id'], $page['pageCode'], $page['code']);
-                if (empty($structionDetail)) {
-                    continue;
-                }
+        $structionPage = $this->structionPagesRepository->getByPageCodeAndCodeForView($pageCode, $code);
+        foreach ($structionPage as $page) {
+            if (empty($page['id'])) {
+                continue;
+            }
 
-                if (!empty($page['singleRow'])) {
-                    $listData[$page['code']] = $structionDetail[0] ?? [];
-                } else {
-                    $listData[$page['code']] = $structionDetail;
-                }
+            $structionDetail = $this->getStructionDetail($page['id'], $page['pageCode'], $page['code']);
+            if (empty($structionDetail)) {
+                continue;
+            }
+
+            if (!empty($page['singleRow'])) {
+                $listData[$page['code']] = $structionDetail[0] ?? [];
+            } else {
+                $listData[$page['code']] = $structionDetail;
             }
         }
+
         return $listData;
     }
 
     private function getStructionDetail ($structionPageId, $pageCode, $code) {
         $listData = [];
-        if ($structionPageId) {
-            $structionDetails = $this->structionDetailsRepository->getByStructionPageIdForView($structionPageId);
-            foreach ($structionDetails as &$item) {
-                if (empty($item['id'])) {
-                    continue;
-                }
-                $metas = $this->structionMetaRepository->getByStructionDetailId($item['id']);
+        if (empty($structionPageId)) {
+            return $listData;
+        }
 
-                if (empty($metas)) {
-                    continue;
-                }
-
-                foreach ($metas as $meta) {
-                    $type = $this->getKeyFormByInputKey($meta->key, $pageCode, $code);
-
-                    if ($type === CommonConstant::IMAGE) {
-                        $meta->value = Storage::url($meta->value);
-                    }
-
-                    if ($type === CommonConstant::IMAGES) {
-                        $meta->value = json_decode($meta->value);
-
-                        foreach($meta->value as $val) {
-                            if (!empty($val->image)) {
-                                $val->image = Storage::url($val->image);
-                            }
-                        }
-
-                    }
-                    $item[$meta->key] = $meta->value ?? '';
-                }
-
-                $listData[] = $item;
+        $structionDetails = $this->structionDetailsRepository->getByStructionPageIdForView($structionPageId);
+        foreach ($structionDetails as &$item) {
+            if (empty($item['id'])) {
+                continue;
             }
+            $metas = $this->structionMetaRepository->getByStructionDetailId($item['id']);
+
+            if (empty($metas)) {
+                continue;
+            }
+
+            foreach ($metas as $meta) {
+                $type = $this->getKeyFormByInputKey($meta->key, $pageCode, $code);
+
+                if ($type === CommonConstant::IMAGE) {
+                    $meta->value = Storage::url($meta->value);
+                }
+
+                if ($type === CommonConstant::IMAGES) {
+                    $meta->value = json_decode($meta->value);
+
+                    foreach($meta->value as $val) {
+                        if (!empty($val->image)) {
+                            $val->image = Storage::url($val->image);
+                        }
+                    }
+
+                }
+                $item[$meta->key] = $meta->value ?? '';
+            }
+
+            $listData[] = $item;
         }
 
         return $listData;

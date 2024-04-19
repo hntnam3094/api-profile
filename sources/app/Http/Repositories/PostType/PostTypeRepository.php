@@ -85,7 +85,7 @@ class PostTypeRepository extends BaseRepository {
     }
 
 
-    public function getBySlug ($postType, $key, $slug) {
+    public function getBySlug ($postType, $slug) {
         $query = $this->model
                 ->join('post_detail', function($join) {
                     $join->on('post_type.id', '=', 'post_detail.postTypeId')
@@ -96,7 +96,6 @@ class PostTypeRepository extends BaseRepository {
                         ->whereNull('post_meta.deleted_at');
                 })
                 ->where('post_type.code', $postType)
-                ->where('metaKey', $key)
                 ->where('metaValue', 'like', '%' . $slug . '%');
 
 
@@ -104,7 +103,7 @@ class PostTypeRepository extends BaseRepository {
             ->orderBy('post_detail.sequence', 'ASC')
             ->orderBy('post_detail.created_at', 'DESC')
             ->select('post_detail.*')
-            ->first();
+            ->first()->toArray();
     }
 
 }

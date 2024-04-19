@@ -19,6 +19,6 @@ class PostMetaRepository extends BaseRepository {
         if (!empty($key)) {
             $query->whereIn('metaKey', $key);
         }
-        return $query->select('metaKey', 'metaValue')->get();
+        return $query->select('metaKey', 'metaValue')->get()->toArray();
     }
 }
