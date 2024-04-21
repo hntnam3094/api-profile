@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('postDetailId');
             $table->string('metaKey');
-            $table->string('metaValue');
+            $table->longText('metaValue');
 
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

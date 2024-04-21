@@ -44,6 +44,7 @@ class CategoryService {
                     if (!empty($postMeta)) {
                         foreach ($postMeta as $meta) {
                             $type = $this->getKeyFormByInputKey($meta->metaKey, $postType);
+
                             if ($type == CommonConstant::IMAGE) {
                                 $meta->metaValue = Storage::url($meta->metaValue);
                             }
@@ -211,10 +212,10 @@ class CategoryService {
         return $key;
     }
 
-    public function getCategoryData($postType) {
+    public function getDataByPostType ($postType) {
         if ($postType) {
             $listCategory = $this->categoryRepository->getByPostType($postType);
-            if (count($listCategory) > 0) {
+            if (empty(count($listCategory))) {
                 return [];
             }
 

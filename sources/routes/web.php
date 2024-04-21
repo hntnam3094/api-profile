@@ -21,12 +21,9 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-// Route::get('/ve-chung-toi.html', [AboutController::class, 'index'])->name('about.index');
-// Route::get('/gom.html', [ProductController::class, 'index2'])->name('booking.index2');
-// Route::get('/san-pham.html', [ProductController::class, 'index'])->name('product.index');
-// Route::get('/san-pham/{slug}.html', [ProductController::class, 'show'])->name('product.detail');
-// Route::get('/lien-he.html', [ContactController::class, 'index'])->name('contact.index');
+Route::get('/', function () {
+    return view('welcome');
+})->name('home.index');
 
 
 Route::prefix('/office')->group(function () {

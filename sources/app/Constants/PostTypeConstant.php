@@ -13,11 +13,7 @@ class PostTypeConstant {
     public const listTreeCategory = 'listTreeCategory';
     public const defaultData = 'defaultData';
 
-    public const PRODUCT_CODE = 'product';
-    public const PRODUCT_NAME = 'Poduct';
-    public const PRODUCT_CATEGORY = 1;
-
-    public const BOOKING_CODE = 'booking';
-    public const BOOKING_NAME = 'Booking';
-    public const BOOKING_CATEGORY = 0;
+    public const BLOG_CODE = 'blog';
+    public const BLOG_NAME = 'Blog';
+    public const BLOG_CATEGORY = 1;
 }

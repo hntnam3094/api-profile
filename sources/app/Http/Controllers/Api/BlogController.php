@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Constants\PostTypeConstant;
+use App\Facades\PostTypeFacade;
+use App\Http\Controllers\Controller;
 use App\Http\Services\CategoryService;
 use App\Http\Services\PostTypeService;
-use App\Http\Services\StructionService;
+use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 
-class HomeController extends Controller
+class BlogController extends Controller
 {
-    private $structionService;
-    private $categoryService;
+
+    use ApiResponseTrait;
+
     private $postTypeService;
 
-    public function __construct(
-        StructionService $structionService,
-        CategoryService $categoryService,
+    public function __construct (
         PostTypeService $postTypeService
     )
     {
-        $this->structionService = $structionService;
-        $this->categoryService = $categoryService;
         $this->postTypeService = $postTypeService;
     }
     /**
@@ -28,15 +28,8 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $structionData = $this->structionService->getStructionData('home');
-        $categoryProduct = $this->categoryService->getCategoryData('product');
-        $productData = $this->postTypeService->getPosttypeData('product');
-
-        return view('welcome', [
-            'structionData' => $structionData,
-            'categoryProduct' => $categoryProduct,
-            'productData' => $productData
-        ]);
+        $data = $this->postTypeService->getDataByPostType(PostTypeConstant::BLOG_CODE);
+        return $this->responseWithSuccess($data);
     }
 
     /**
@@ -58,9 +51,11 @@ class HomeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        $data = $this->postTypeService->getBySlug(PostTypeConstant::BLOG_CODE, $slug);
+
+        return $this->responseWithSuccess($data);
     }
 
     /**
@@ -85,5 +80,11 @@ class HomeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getBlogByCategorySlug ($slug) {
+        $data = $this->postTypeService->getDataByCategorySlug(PostTypeConstant::BLOG_CODE, $slug);
+
+        return $this->responseWithSuccess($data);
     }
 }

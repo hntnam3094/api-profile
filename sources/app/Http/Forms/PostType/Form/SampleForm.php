@@ -4,10 +4,10 @@ namespace App\Http\Forms\PostType\Form;
 use App\Constants\OptionConstant;
 use App\Constants\PostTypeConstant;
 
-class ProductForm {
-    public $code = PostTypeConstant::PRODUCT_CODE;
-    public $name = PostTypeConstant::PRODUCT_NAME;
-    public $hasCategory = PostTypeConstant::PRODUCT_CATEGORY;
+class SampleForm {
+    // public $code = PostTypeConstant::PRODUCT_CODE;
+    // public $name = PostTypeConstant::PRODUCT_NAME;
+    // public $hasCategory = PostTypeConstant::PRODUCT_CATEGORY;
 
     public $fieldSearch = [
         [

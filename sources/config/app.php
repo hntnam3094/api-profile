@@ -185,6 +185,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'PostType' => App\Facades\PostTypeFacade::class
     ])->toArray(),
 
 ];

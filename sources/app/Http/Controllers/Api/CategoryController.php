@@ -1,17 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Constants\PostTypeConstant;
+use App\Http\Controllers\Controller;
+use App\Http\Services\CategoryService;
+use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Http\Request;
 
-class ContactController extends Controller
+class CategoryController extends Controller
 {
+    use ApiResponseTrait;
+
+    private $categoryService;
+
+    public function __construct(
+        CategoryService $categoryService
+    )
+    {
+        $this->categoryService = $categoryService;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('contact');
+        $data = $this->categoryService->getDataByPostType(PostTypeConstant::BLOG_CODE);
+
+        return $this->responseWithSuccess($data);
     }
 
     /**

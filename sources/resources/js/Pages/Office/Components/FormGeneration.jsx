@@ -459,7 +459,7 @@ function HasRadio({ form, register, className }) {
     );
 }
 
-function HasTextArea({ form, register, className }) {
+function HasTextArea({ form, register, className, isDetail }) {
     return (
         <Textarea
             id={form.name}
@@ -467,6 +467,7 @@ function HasTextArea({ form, register, className }) {
             rows={form.rows ?? 4}
             {...register(form.name)}
             className={className}
+            disabled={isDetail}
         />
     );
 }

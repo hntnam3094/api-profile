@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('structionDetailId');
             $table->string('key');
-            $table->text('value');
+            $table->longText('value');
 
             $table->integer('created_by')->default(0);
             $table->integer('updated_by')->default(0);

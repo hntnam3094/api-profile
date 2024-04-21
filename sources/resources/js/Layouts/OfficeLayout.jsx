@@ -3,7 +3,7 @@ import HasSidebar from "@/Pages/Office/Components/HasSidebar";
 import {usePage} from "@inertiajs/react";
 export default function OfficeLayout({ children }) {
     const { auth } = usePage().props
-    console.log(auth)
+
     return (
         <AuthenticatedLayout user={auth.user}>
             <div className="w-full flex">

@@ -96,6 +96,7 @@ class PostTypeRepository extends BaseRepository {
                         ->whereNull('post_meta.deleted_at');
                 })
                 ->where('post_type.code', $postType)
+                ->where('metaKey', 'slug')
                 ->where('metaValue', 'like', '%' . $slug . '%');
 
 
@@ -104,6 +105,35 @@ class PostTypeRepository extends BaseRepository {
             ->orderBy('post_detail.created_at', 'DESC')
             ->select('post_detail.*')
             ->first()->toArray();
+    }
+
+
+    public function getByPostTypeAndCategorySlug ($postType, $categorySlug) {
+        $query = $this->model->join('post_detail', function($join) {
+            $join->on('post_type.id', '=', 'post_detail.postTypeId')
+                ->whereNull('post_detail.deleted_at');
+        })
+        ->where('post_type.code', $postType)
+        ->where('post_detail.status', CommonConstant::STATUS_ACTIVE)
+        ->join('post_map_category', function ($join) {
+            $join->on('post_detail.id', '=', 'post_map_category.postId')
+                ->whereNull('post_map_category.deleted_at');
+            })
+        ->join('category', function ($join) {
+            $join->on('post_map_category.categoryId', '=', 'category.id')
+                ->whereNull('category.deleted_at');
+        })
+        ->join('category_meta', function ($join) {
+            $join->on('category.id', 'category_meta.categoryId')
+                ->whereNull('category_meta.deleted_at');
+        })
+        ->where('category_meta.metaKey', 'slug')
+        ->where('category_meta.metaValue', $categorySlug);
+
+        return $query->orderBy('post_detail.sequence', 'ASC')
+                    ->orderBy('post_detail.created_at', 'DESC')
+                    ->select('post_detail.*')
+                    ->get()->toArray();
     }
 
 }

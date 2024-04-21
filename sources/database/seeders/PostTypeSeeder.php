@@ -17,14 +17,9 @@ class PostTypeSeeder extends Seeder
 
         PostType::insert([
             [
-                'code' => PostTypeConstant::PRODUCT_CODE,
-                'name' => PostTypeConstant::PRODUCT_NAME,
-                'hasCategory' => PostTypeConstant::PRODUCT_CATEGORY,
-            ],
-            [
-                'code' => PostTypeConstant::BOOKING_CODE,
-                'name' => PostTypeConstant::BOOKING_NAME,
-                'hasCategory' => PostTypeConstant::BOOKING_CATEGORY,
+                'code' => PostTypeConstant::BLOG_CODE,
+                'name' => PostTypeConstant::BLOG_NAME,
+                'hasCategory' => PostTypeConstant::BLOG_CATEGORY,
             ]
         ]);
     }

@@ -220,7 +220,7 @@ class PostTypeService {
         return $key;
     }
 
-    public function getPosttypeData ($postType) {
+    public function getDataByPostType ($postType) {
         if (!empty($postType)) {
             $listPostDetail = $this->postTypeRepository->getByPostType($postType);
 
@@ -238,6 +238,21 @@ class PostTypeService {
     public function getPosttypeDataByCategoryId ($postType, $categoryId) {
         if (!empty($postType)) {
             $listPostDetail = $this->postTypeRepository->getByPostType($postType, $categoryId);
+
+            if (count($listPostDetail) > 0) {
+                foreach ($listPostDetail as &$postDetail) {
+                    $postDetail = $this->setPostMetaForDetail($postType, $postDetail, $postDetail['id']);
+                }
+            }
+
+            return $listPostDetail;
+        }
+        return [];
+    }
+
+    public function getDataByCategorySlug ($postType, $categorySlug) {
+        if (!empty($postType)) {
+            $listPostDetail = $this->postTypeRepository->getByPostTypeAndCategorySlug($postType, $categorySlug);
 
             if (count($listPostDetail) > 0) {
                 foreach ($listPostDetail as &$postDetail) {
